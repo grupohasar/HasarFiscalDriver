@@ -1,0 +1,35 @@
+<resources>
+    <string-array name="command_array">
+        <item>Test 0 - Factura B y Pago</item>
+        <item>Test 1 - Zona/Cliente/Descuentos/Factura B/Pago</item>
+        <item>Test 2 - Nota de Crédito B/Pago</item>
+        <item>Test 3 - Zona/Cliente/Descuentos/Factura A/Pago</item>
+        <item>Test 4 - Zona/Cliente/Descuento/Nota de Debito A/Pago</item>
+        <item>Test 5 - Texto Genérico</item>
+        <item>Test 6 - Descuento/Factura A/ Pago</item>
+        <item>Test 7 - Efectivo y Cheque/ Factura A/Pago</item>
+        <item>Test 8 - Tarjeta de Credito/ Factura A/ Pago</item>
+        <item>Test 9 - Tarjeta de crédito texto genérico</item>
+        <item>Test 10 - Extracción Dinero texto genérico</item>
+        <item>Cancelar Documento</item>
+        <item>Cierre Z</item>
+        <item>Factura Electrónica B</item>
+        <item>Última factura electrónica</item>
+        <item>Verificar si AFIP esta Vivo</item>
+        <item>Reporte Z por fecha</item>
+        <item>Reporte Z por n° de Z</item>
+        <item>Reimprimir</item>
+        <item>Presupuesto</item>
+        <item>Obtenter y setear limites</item>
+        <item>Consultar Estado</item>
+
+    </string-array>
+    <string name="app_name">Fiscal Library Ejemplos</string>
+    <string name="lbl_IP">Ip</string>
+    <string name="rbutton_first_generation">1ra Generación</string>
+    <string name="rbutton_second_generation">2da Generación</string>
+    <string name="button_send">Enviar</string>
+    <string name="github">Github</string>
+    <string name="contact">Contacto</string>
+
+</resources>
