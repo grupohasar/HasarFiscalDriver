@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         URL api;
         //URL webService;
         try {
-           String sdkAppId  = getResources().getString(R.string.sdkAppId); //si da error al compilar dejar variable sdkAppId = ""
+           String sdkAppId  = getResources().getString(R.string.sdkAppId);    //si da error al compilar dejar variable sdkAppId= ""
             api = new URL(" http://34.212.218.149:8080/api/");
             FiscalManager result = FiscalManager.getInstance();
             if (rbFirst.isChecked()) {
