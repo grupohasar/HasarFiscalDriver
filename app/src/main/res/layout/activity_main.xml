@@ -4,34 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="false"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#3F51B5"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
         android:id="@+id/llEndpoint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/app_bar_layout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:paddingBottom="8dp"
         android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:layout_alignParentLeft="true">
+        android:paddingStart="8dp">
 
         <TextView
             android:id="@+id/textView"
@@ -40,9 +24,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="8dp"
-            android:text="@string/lbl_IP"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="8dp" />
+            android:text="@string/lbl_IP" />
 
         <EditText
             android:id="@+id/txtIp"
@@ -53,8 +35,7 @@
             android:ems="10"
             android:enabled="false"
             android:inputType="textPersonName"
-            android:text="http://"
-            android:layout_toRightOf="@+id/textView" />
+            android:text="http://10.0.6.104:2345" />
 
 
     </RelativeLayout>
@@ -67,8 +48,7 @@
         android:layout_below="@+id/llEndpoint"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true">
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/rbFirstGen"
@@ -90,66 +70,76 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Factura Electrónica" />
+            android:text="Electronic Invoice" />
     </RadioGroup>
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <LinearLayout
+        android:id="@+id/llCommand"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/llPrinterGen">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/selection_list"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/llPrinterGen"
+        android:orientation="horizontal"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layoutAnimation="@anim/layout_animation_fall_down"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/llMensaje"
+            android:gravity="left|center"
+            android:text="@string/label_command" />
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="230dp"
+            android:layout_height="49dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llCommand"
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="100dp">
+
+        <Button
+            android:id="@+id/buttonSend"
+            android:layout_width="121dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/button_send"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent" />
+    </LinearLayout>
 
-        </androidx.recyclerview.widget.RecyclerView>
-        <LinearLayout
-            android:id="@+id/llMensaje"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:orientation="vertical">
-            <Button
-                android:id="@+id/buttonSend"
-                android:layout_width="121dp"
-                android:layout_height="49dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/button_send"
-                android:layout_gravity="center"
-               />
+    <Button
+        android:id="@+id/factura_desconectar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="17dp"
+        android:text="Factura Desconectar" />
 
-            <TextView
-                android:id="@+id/txtMensaje"
-                android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="Si desea adquirir la versión completa del SDK, .AAR, aplicación de testing sin bloqueos, Facturación Electrónica, Percepciones. Puede enviar un correo a : "
-                android:textColor="@android:color/holo_red_dark"
-                android:visibility="gone" />
+    <Button
+        android:id="@+id/reintentar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/factura_desconectar"
+        android:layout_marginEnd="26dp"
+        android:text="Reintentar" />
 
-            <TextView
-                android:id="@+id/txtEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="20dp"
-                android:clickable="false"
-                android:text="hsventas@hasar.com"
-                android:textAllCaps="false"
-                android:textColor="@android:color/holo_blue_dark"
-                app:autoSizeTextType="uniform"
-                android:visibility="gone"/>
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>
 

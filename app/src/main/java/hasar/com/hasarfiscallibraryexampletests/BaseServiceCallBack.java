@@ -1,4 +1,4 @@
-package hasar.com.hasarfiscallibrarygithub;
+package hasar.com.hasarfiscallibraryexampletests;
 
 import android.util.Log;
 
