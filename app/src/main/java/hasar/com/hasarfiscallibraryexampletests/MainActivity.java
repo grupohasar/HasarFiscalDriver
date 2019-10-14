@@ -261,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
         URL api;
         //URL webService;
         try {
+           String sdkAppId  = getResources().getString(R.string.sdkAppId); //si da error al compilar dejar variable sdkAppId = ""
             api = new URL(" http://34.212.218.149:8080/api/");
             FiscalManager result = FiscalManager.getInstance();
             if (rbFirst.isChecked()) {
@@ -276,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).secondGen(loc).build());
             } else if (rbElectronic.isChecked()) {
-                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).electronicInvoice(api, "admin", "admin", "EmpresaPrueba").build());
+                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).electronicInvoice(api, "admin", "admin", "EmpresaPrueba", sdkAppId).build());
             }
 
         } catch (MalformedURLException e) {

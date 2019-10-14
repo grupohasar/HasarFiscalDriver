@@ -132,3 +132,4 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.gitignore.io/api/androidstudio
+app/src/main/res/values/sdkAppId.xml
