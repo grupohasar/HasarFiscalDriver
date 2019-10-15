@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
             api = new URL(" http://34.212.218.149:8080/api/");
             FiscalManager result = FiscalManager.getInstance();
             if (rbFirst.isChecked()) {
-                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).firstGen(FirstGenerationPrinterModel.P441_201).build());
+                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).firstGen(FirstGenerationPrinterModel.P441_201, sdkAppId).build());
             } else if (rbSecond.isChecked()) {
                 String ip = txtIp.getText().toString();
                 SecondGenerationLocation loc = null;
@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
                     endpoint = new URL(ip);
                     loc = new SecondGenerationLocation(endpoint);
                 }
-                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).secondGen(loc).build());
+                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).secondGen(loc, sdkAppId).build());
             } else if (rbElectronic.isChecked()) {
                 result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).electronicInvoice(api, "admin", "admin", "EmpresaPrueba", sdkAppId).build());
             }
