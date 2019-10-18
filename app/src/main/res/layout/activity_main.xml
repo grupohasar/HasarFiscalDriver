@@ -90,7 +90,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="left|center"
-            android:text="@string/label_command" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold" />
+            //android:text="@string/label_command" />
+
+
 
         <Spinner
             android:id="@+id/spinner1"
@@ -140,6 +144,13 @@
         android:layout_alignTop="@+id/factura_desconectar"
         android:layout_marginEnd="26dp"
         android:text="Reintentar" />
+
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 
 </RelativeLayout>
 

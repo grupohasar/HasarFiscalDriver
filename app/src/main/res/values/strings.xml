@@ -1,6 +1,7 @@
 <resources>
     <string-array name="command_array">
         <item>Factura Electronica B </item>
+        <item>FE_ACK</item>
         <item>Percepcion Factura A  </item>
         <item>Percepcion Factura A 02 </item>
         <item>AFIP </item>
@@ -19,11 +20,12 @@
         <item>6 Medios de Pago </item>
         <item>Cierre Z</item>
         <item>Cancelar</item>
+        <item>PUT PosNumber</item>
     </string-array>
     <string name="app_name">HasarFiscalLibraryExampleTests</string>
     <string name="lbl_IP">Ip</string>
     <string name="rbutton_first_generation">1st Generation</string>
     <string name="rbutton_second_generation">2nd Generation</string>
     <string name="button_send">Send</string>
-    <string name="label_command">Command</string>
+
 </resources>

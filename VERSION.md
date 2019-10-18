@@ -1,3 +1,14 @@
+VERSION 0.5.0
+Se agrega numero de version en la aplicacion.
+Modificacion de Checkout("ABC123", new PointOfSales(true, 11, "CAE"), 2, null))
+    Ahora admite valor alfanumerico en checkoutNumber.
+    Devuelve mensaje detallado en caso de error en electronicInvoiceRegisterCompanyResponse.getStatus()
+Se modifico ElectronicInvoiceACKBean
+    electronicInvoiceFactory.newElectronicInvoiceACK("1", 1, lastTransactionNumber, "30618829150")
+    Retorna Boolean. Previamente realizar factura electronica para obtener lastTransactionNumber.
+Se agrega metodo boolean putPosNumber(int number)
+    Por ahora dummy retorna true.
+
 VERSION 0.4.25
 Modificaciones en el SDK para que no permita crear empresas repetidas. Lo mismo para sucursales, puntos de venta y cajas.
 Se modificaron los test del Sandbox para que todos muestren un mensaje de error en el caso que existan.
