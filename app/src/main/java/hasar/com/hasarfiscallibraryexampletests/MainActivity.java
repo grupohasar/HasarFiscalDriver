@@ -1160,7 +1160,7 @@ public class MainActivity extends AppCompatActivity {
         ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30618829150", "AND",
                 new Subsidiary("sub_prueba", "2"),
                 new PointOfSales(true, 11, "CAE"),
-                new Checkout("", new PointOfSales(true, 11, "CAE"), 2, null));
+                new Checkout("ABC123", new PointOfSales(true, 11, "CAE"), 2, null));
 
         FiscalManager.getInstance().electronicInvoiceRegisterCompany(company, new ToastOnExceptionServiceCallback<ElectronicInvoiceRegisterCompanyResponse>(getApplicationContext()) {
             @Override
