@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hasar.fiscal.dataLayer.beans.AssociatedDocumentBean;
@@ -76,6 +77,7 @@ import com.hasar.fiscal.dataLayer.factories.TaxExceptionFactory;
 import com.hasar.fiscal.dataLayer.factories.TributeFactory;
 import com.hasar.fiscal.dataLayer.factories.ZoneConfigurator;
 import com.hasar.fiscal.exceptions.FiscalDriverException;
+import com.hasar.fiscal.executioner.Executioner;
 import com.hasar.fiscal.fiscalManager.FirstGenerationPrinterModel;
 import com.hasar.fiscal.fiscalManager.FiscalManager;
 import com.hasar.fiscal.fiscalManager.FiscalManagerConfigurationBuilder;
@@ -115,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
     private Tributes tributes;
     private TaxExceptionFactory taxExceptionFactory = new TaxExceptionFactory();
     private ConfigureFiscalPrinterBean configuracionImpresor = new ConfigureFiscalPrinterBean();
+    private String versionLibrary = Executioner.getVersion();
 
     //Data for testing
 
@@ -122,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
             "1",
             12,
             documentFactory.newCUIT("30618829150"));
-
 
     private EditText txtIp;
     private Button btnSend;
@@ -144,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         generateIVAs();
+        final TextView txtVersion = findViewById(R.id.textView2);
+        txtVersion.setText("VERSION: " + versionLibrary);
 
         final Spinner dropdown = findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -173,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
         btnSend = findViewById(R.id.buttonSend);
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,58 +190,64 @@ public class MainActivity extends AppCompatActivity {
                         FE_Factura_B();
                         break;
                     case 1:
-                        Percepcion_Factura_A();
+                        FE_ACK();
                         break;
                     case 2:
-                        Percepcion_Factura_A_02();
+                        Percepcion_Factura_A();
                         break;
                     case 3:
-                        FE_Afip_Is_Alive();
+                        Percepcion_Factura_A_02();
                         break;
                     case 4:
-                        FE_Register_Company();
+                        FE_Afip_Is_Alive();
                         break;
                     case 5:
-                        FP_FACTURA_A();
+                        FE_Register_Company();
                         break;
                     case 6:
-                        FP_Factura_B();
+                        FP_FACTURA_A();
                         break;
                     case 7:
-                        Header_Factura_A();
+                        FP_Factura_B();
                         break;
                     case 8:
-                        Header_Factura_B();
+                        Header_Factura_A();
                         break;
                     case 9:
-                        Header_No_Fiscal();
+                        Header_Factura_B();
                         break;
                     case 10:
-                        Tipo_Habilitacion('A');
+                        Header_No_Fiscal();
                         break;
                     case 11:
-                        Tipo_Habilitacion('L');
+                        Tipo_Habilitacion('A');
                         break;
                     case 12:
-                        Tipo_Habilitacion('M');
+                        Tipo_Habilitacion('L');
                         break;
                     case 13:
-                        FP_Cliente_No_Categorizado();
+                        Tipo_Habilitacion('M');
                         break;
                     case 14:
-                        Medios_De_Pago(4);
+                        FP_Cliente_No_Categorizado();
                         break;
                     case 15:
-                        Medios_De_Pago(5);
+                        Medios_De_Pago(4);
                         break;
                     case 16:
-                        Medios_De_Pago(6);
+                        Medios_De_Pago(5);
                         break;
                     case 17:
-                        Cierre_Z();
+                        Medios_De_Pago(6);
                         break;
                     case 18:
+                        Cierre_Z();
+                        break;
+                    case 19:
                         Cancelar();
+                        break;
+                    case 20:
+                        putPosNumber();
                         break;
                 }
             }
@@ -261,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
         URL api;
         //URL webService;
         try {
-           String sdkAppId  = getResources().getString(R.string.sdkAppId);    //si da error al compilar dejar variable sdkAppId= ""
+            String sdkAppId = getResources().getString(R.string.sdkAppId);    //si da error al compilar dejar variable sdkAppId= ""
             api = new URL(" http://34.212.218.149:8080/api/");
             FiscalManager result = FiscalManager.getInstance();
             if (rbFirst.isChecked()) {
@@ -353,7 +364,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
-
                 estadoDeImpresion = "FACTURANDO";
                 Log.d("Estado", estadoDeImpresion);
 
@@ -419,8 +429,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 
     private void execute_Payment_4(double amount) {
@@ -659,13 +667,12 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
-
-
         );
 
     }
 
-    /*private void FE_ACK() {
+
+    private void FE_ACK() { //CREO UNA FE PARA QUE ME DEVUELVA EL ULTIMO NUMERO DE TRANSACCION Y PASARSELO AL ACK
         InvoiceBean bean = new InvoiceBean();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
@@ -678,26 +685,34 @@ public class MainActivity extends AppCompatActivity {
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Leche", "103", 45.50).quantity(1).iva(ivaRegistry.get("Gravado0")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Frutilla", "104", 130.00).quantity(1).iva(ivaRegistry.get("Gravado10.5")));
 
-        ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK(bean);
-        String companyCuit = beanACK.getCompanyCuit();
-        String checkOutNumer = beanACK.getCheckOutNumber();
-        String lastTransactionNumber = beanACK.getLastTransactionNumber();
-        String subsidiaryNumber = beanACK.getSubsidiaryNumber();
-
-        FiscalManager.getInstance().electronicInvoiceACK(beanACK, new ServiceCallback<ElectronicInvoiceACKResponse>() {
+        ElectronicInvoiceBean electronicInvoiceBean = electronicInvoiceFactory.newElectronicInvoice(bean);
+        //Finally, send the invoice to the fiscal printer.
+        FiscalManager.getInstance().electronicInvoice(electronicInvoiceBean, new ToastOnExceptionServiceCallback<ElectronicInvoiceResponse>(getApplicationContext()) {
             @Override
-            public void onResult(ElectronicInvoiceACKResponse response) {
-                Toast.makeText(getApplicationContext(), response.getStatus().toString(), Toast.LENGTH_LONG).show();
+            public void onResult(ElectronicInvoiceResponse response) {
+                lastTransactionNumber = response.getTransactionNumber();
 
+                ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("1", 1, lastTransactionNumber, "30618829150");
+                FiscalManager.getInstance().electronicInvoiceACK(beanACK, new ServiceCallback<Boolean>() {
+                    @Override
+                    public void onResult(Boolean response) {
+                        Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(FiscalDriverException ex) {
+                        Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
             @Override
-            public void onError(FiscalDriverException ex) {
-
+            public void onError(FiscalDriverException e) {
+                super.onError(e);
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
-    }*/
+    }
 
 
     private void FP_Factura_B() {      //  testElectronicInvoice02
@@ -774,7 +789,6 @@ public class MainActivity extends AppCompatActivity {
                     bean.setTributes(tributesToPrint);
                 }
                 ElectronicInvoiceBean electronicInvoiceBean = electronicInvoiceFactory.newElectronicInvoice(bean);
-
 
 
                 //Finally, send the invoice to the fiscal printer.
@@ -988,10 +1002,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                     public void onError(FiscalDriverException e) {
-                     super.onError(e);
-                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                }
+                    public void onError(FiscalDriverException e) {
+                        super.onError(e);
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
         );
     }
@@ -1146,7 +1160,7 @@ public class MainActivity extends AppCompatActivity {
         ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30618829150", "AND",
                 new Subsidiary("sub_prueba", "2"),
                 new PointOfSales(true, 11, "CAE"),
-                new Checkout("1", new PointOfSales(true, 11, "CAE"), 2, null));
+                new Checkout("", new PointOfSales(true, 11, "CAE"), 2, null));
 
         FiscalManager.getInstance().electronicInvoiceRegisterCompany(company, new ToastOnExceptionServiceCallback<ElectronicInvoiceRegisterCompanyResponse>(getApplicationContext()) {
             @Override
@@ -1154,10 +1168,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), electronicInvoiceRegisterCompanyResponse.getStatus().toString(), Toast.LENGTH_LONG).show();
             }
 
-            @Override
+            /*@Override
             public void onError(FiscalDriverException e) {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+            }*/
         });
 
     }
@@ -1196,8 +1210,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(FiscalDriverException e) {
                         super.onError(e);
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
+                    }
+                }
         );
     }
 
@@ -1313,9 +1327,10 @@ public class MainActivity extends AppCompatActivity {
                 FiscalManager.getInstance().fiscalPrinterConfigurationQuery(new ToastOnExceptionServiceCallback<ConfigureFiscalPrinterBean>(getApplication()) {
                     @Override
                     public void onResult(ConfigureFiscalPrinterBean configureFiscalPrinterBean) {
-                        if (configureFiscalPrinterBean.getTipoHabilitacion() == valor )
+                        if (configureFiscalPrinterBean.getTipoHabilitacion() == valor)
                             Toast.makeText(getApplicationContext(), "Se establecio correctamente", Toast.LENGTH_LONG).show();
-                        else Toast.makeText(getApplicationContext(), "Error de tipo habilitacion", Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(getApplicationContext(), "Error de tipo habilitacion", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -1417,5 +1432,9 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    private void putPosNumber() {
+        Boolean resp = FiscalManager.getInstance().putPosNumber(1);
+        Toast.makeText(getApplicationContext(), resp.toString().toUpperCase(), Toast.LENGTH_LONG).show();
+    }
 
 }
