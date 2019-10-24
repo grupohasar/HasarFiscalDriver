@@ -1,3 +1,15 @@
+VERSION 0.6.0
+Se elimina test PUT PosNumber. Se reemplazo boolean en metodo newCompany();
+Se modifico electronicInvoiceFactory.newCompany("30522211563", "PRUEBA",
+                new Subsidiary("sucursal_prueba", "32"),
+                new PointOfSales(true, 12, "CAE"),
+                new Checkout("123ABC", new PointOfSales(true, 12, "CAE"), 32, null),
+                false);
+Se agrega nuevo parametro boolean a newCompany(), este controla el impacto al servidor para create y put.
+Se modifico electronicInvoice(api, "EmpresaPrueba", sdkAppId)
+    Ya no se le pasa usuario y clave de la api.
+Se agrega Test FP_Factura_C(). Este funciona solo con configuracion de impresora Monotributista.
+
 VERSION 0.5.0
 Se agrega numero de version en la aplicacion.
 Modificacion de Checkout("ABC123", new PointOfSales(true, 11, "CAE"), 2, null))

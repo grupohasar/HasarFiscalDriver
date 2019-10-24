@@ -1,7 +1,9 @@
 package hasar.com.hasarfiscallibraryexampletests;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -211,43 +213,42 @@ public class MainActivity extends AppCompatActivity {
                         FP_Factura_B();
                         break;
                     case 8:
+                        FP_Factura_C();
+                    case 9:
                         Header_Factura_A();
                         break;
-                    case 9:
+                    case 10:
                         Header_Factura_B();
                         break;
-                    case 10:
+                    case 11:
                         Header_No_Fiscal();
                         break;
-                    case 11:
+                    case 12:
                         Tipo_Habilitacion('A');
                         break;
-                    case 12:
+                    case 13:
                         Tipo_Habilitacion('L');
                         break;
-                    case 13:
+                    case 14:
                         Tipo_Habilitacion('M');
                         break;
-                    case 14:
+                    case 15:
                         FP_Cliente_No_Categorizado();
                         break;
-                    case 15:
+                    case 16:
                         Medios_De_Pago(4);
                         break;
-                    case 16:
+                    case 17:
                         Medios_De_Pago(5);
                         break;
-                    case 17:
+                    case 18:
                         Medios_De_Pago(6);
                         break;
-                    case 18:
+                    case 19:
                         Cierre_Z();
                         break;
-                    case 19:
-                        Cancelar();
-                        break;
                     case 20:
-                        putPosNumber();
+                        Cancelar();
                         break;
                 }
             }
@@ -288,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).secondGen(loc, sdkAppId).build());
             } else if (rbElectronic.isChecked()) {
-                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).electronicInvoice(api, "admin", "admin", "EmpresaPrueba", sdkAppId).build());
+                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).electronicInvoice(api, "EmpresaPrueba", sdkAppId).build());
             }
 
         } catch (MalformedURLException e) {
@@ -746,6 +747,37 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    private void FP_Factura_C() {
+        //Este test solo funciona con le configuracion de impresora y clover: MONOTRIBUTISTA
+        InvoiceBean bean = new InvoiceBean();
+        bean.setInvoiceType(InvoiceTypes.FACTURA_C);
+        bean.setClient(
+                clientFactory.newResponsableInscripto(
+                        "CAPPELLO, PABLO FERNANDO",
+                        "Sarmiento 6 CHACABUCO",
+                        documentFactory.newCUIT("20214983681")));
+        //Define a item to print in the invoice.,
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("780681022100 - RALLADOR         ", "100", 105.00));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 53.80));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "102", 53.80));
+        FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
+                    @Override
+                    public void onResult(InvoiceResponse response) {
+                        Toast.makeText(getApplicationContext(), "**DEMO**", Toast.LENGTH_LONG).show();
+                        sleep();
+                        executePaymentTest7(201.12, 200);
+                    }
+
+                    @Override
+                    public void onError(FiscalDriverException e) {
+                        super.onError(e);
+                        Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+
+
     private void Percepcion_Factura_A() {       //testElectronicInvoice05
         InvoiceBean bean = new InvoiceBean();
         //Set the invoice type with the InvoiceTypes enumeration.
@@ -1157,21 +1189,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void FE_Register_Company() {
-        ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30618829150", "AND",
-                new Subsidiary("sub_prueba", "2"),
-                new PointOfSales(true, 11, "CAE"),
-                new Checkout("ABC123", new PointOfSales(true, 11, "CAE"), 2, null));
+        ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30522211563", "AND",
+                new Subsidiary("sucursal_prueba", "32"),
+                new PointOfSales(true, 12, "CAE"),
+                new Checkout("123ABC", new PointOfSales(true, 12, "CAE"), 32, null),
+                false);
 
         FiscalManager.getInstance().electronicInvoiceRegisterCompany(company, new ToastOnExceptionServiceCallback<ElectronicInvoiceRegisterCompanyResponse>(getApplicationContext()) {
             @Override
-            public void onResult(ElectronicInvoiceRegisterCompanyResponse electronicInvoiceRegisterCompanyResponse) {
-                Toast.makeText(getApplicationContext(), electronicInvoiceRegisterCompanyResponse.getStatus().toString(), Toast.LENGTH_LONG).show();
+            public void onResult(ElectronicInvoiceRegisterCompanyResponse resp) {
+                StringBuilder builder = new StringBuilder();
+                builder.append("STATUS: " + resp.getStatus());
+                builder.append('\n');
+                builder.append("ERROR: " + resp.getError());
+                builder.append('\n');
+                builder.append("DATO: " + resp.getExistingId());
+                builder.append('\n');
+                builder.append("ERROR TYPE: " + resp.getRegisterCompanyErrorType());
+                builder.append('\n');
+                Toast.makeText(getApplicationContext(), builder.toString(), Toast.LENGTH_LONG).show();
             }
 
-            /*@Override
+            @Override
             public void onError(FiscalDriverException e) {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            }*/
+            }
         });
 
     }
@@ -1431,10 +1473,4 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
-
-    private void putPosNumber() {
-        Boolean resp = FiscalManager.getInstance().putPosNumber(1);
-        Toast.makeText(getApplicationContext(), resp.toString().toUpperCase(), Toast.LENGTH_LONG).show();
-    }
-
 }
