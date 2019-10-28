@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     private Tributes tributes;
     private TaxExceptionFactory taxExceptionFactory = new TaxExceptionFactory();
     private ConfigureFiscalPrinterBean configuracionImpresor = new ConfigureFiscalPrinterBean();
-    private String versionLibrary = Executioner.getVersion();
+   // private String versionLibrary = Executioner.getInstance();
 
     //Data for testing
 
@@ -148,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         generateIVAs();
-        final TextView txtVersion = findViewById(R.id.textView2);
-        txtVersion.setText("VERSION: " + versionLibrary);
+        //final TextView txtVersion = findViewById(R.id.textView2);
+        //txtVersion.setText("VERSION: "+ versionLibrary);
 
         final Spinner dropdown = findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -192,62 +192,57 @@ public class MainActivity extends AppCompatActivity {
                         FE_Factura_B();
                         break;
                     case 1:
-                        FE_ACK();
-                        break;
-                    case 2:
                         Percepcion_Factura_A();
                         break;
-                    case 3:
+                    case 2:
                         Percepcion_Factura_A_02();
                         break;
-                    case 4:
+                    case 3:
                         FE_Afip_Is_Alive();
                         break;
-                    case 5:
-                        FE_Register_Company();
-                        break;
-                    case 6:
+                    case 4:
                         FP_FACTURA_A();
                         break;
-                    case 7:
+                    case 5:
                         FP_Factura_B();
                         break;
-                    case 8:
+                    case 6:
                         FP_Factura_C();
-                    case 9:
+                        break;
+                    case 7:
                         Header_Factura_A();
                         break;
-                    case 10:
+                    case 8:
                         Header_Factura_B();
                         break;
-                    case 11:
+                    case 9:
                         Header_No_Fiscal();
                         break;
-                    case 12:
+                    case 10:
                         Tipo_Habilitacion('A');
                         break;
-                    case 13:
+                    case 11:
                         Tipo_Habilitacion('L');
                         break;
-                    case 14:
+                    case 12:
                         Tipo_Habilitacion('M');
                         break;
-                    case 15:
+                    case 13:
                         FP_Cliente_No_Categorizado();
                         break;
-                    case 16:
+                    case 14:
                         Medios_De_Pago(4);
                         break;
-                    case 17:
+                    case 15:
                         Medios_De_Pago(5);
                         break;
-                    case 18:
+                    case 16:
                         Medios_De_Pago(6);
                         break;
-                    case 19:
+                    case 17:
                         Cierre_Z();
                         break;
-                    case 20:
+                    case 18:
                         Cancelar();
                         break;
                 }
@@ -277,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
             api = new URL(" http://34.212.218.149:8080/api/");
             FiscalManager result = FiscalManager.getInstance();
             if (rbFirst.isChecked()) {
-                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).firstGen(FirstGenerationPrinterModel.P441_201, sdkAppId).build());
+                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).firstGen(FirstGenerationPrinterModel.P441_201).build());
             } else if (rbSecond.isChecked()) {
                 String ip = txtIp.getText().toString();
                 SecondGenerationLocation loc = null;
@@ -287,9 +282,9 @@ public class MainActivity extends AppCompatActivity {
                     endpoint = new URL(ip);
                     loc = new SecondGenerationLocation(endpoint);
                 }
-                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).secondGen(loc, sdkAppId).build());
+                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).secondGen(loc).build());
             } else if (rbElectronic.isChecked()) {
-                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).electronicInvoice(api, "EmpresaPrueba", sdkAppId).build());
+                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).electronicInvoice(api, "admin","admin", "Prueba").build());
             }
 
         } catch (MalformedURLException e) {
@@ -673,7 +668,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void FE_ACK() { //CREO UNA FE PARA QUE ME DEVUELVA EL ULTIMO NUMERO DE TRANSACCION Y PASARSELO AL ACK
+    /*private void FE_ACK() { //CREO UNA FE PARA QUE ME DEVUELVA EL ULTIMO NUMERO DE TRANSACCION Y PASARSELO AL ACK
         InvoiceBean bean = new InvoiceBean();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
@@ -713,7 +708,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-    }
+    }*/
 
 
     private void FP_Factura_B() {      //  testElectronicInvoice02
@@ -750,7 +745,7 @@ public class MainActivity extends AppCompatActivity {
     private void FP_Factura_C() {
         //Este test solo funciona con le configuracion de impresora y clover: MONOTRIBUTISTA
         InvoiceBean bean = new InvoiceBean();
-        bean.setInvoiceType(InvoiceTypes.FACTURA_C);
+        bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_C);
         bean.setClient(
                 clientFactory.newResponsableInscripto(
                         "CAPPELLO, PABLO FERNANDO",
@@ -1188,7 +1183,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void FE_Register_Company() {
+    /*private void FE_Register_Company() {
         ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30522211563", "AND",
                 new Subsidiary("sucursal_prueba", "32"),
                 new PointOfSales(true, 12, "CAE"),
@@ -1216,7 +1211,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
+    }*/
 
     private void Header_No_Fiscal() {   //  testLinesZone_Ticket_No_Fiscal
         InvoiceBean bean = new InvoiceBean();
@@ -1473,4 +1468,6 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
+
+
 }
