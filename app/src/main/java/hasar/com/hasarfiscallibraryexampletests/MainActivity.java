@@ -270,11 +270,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFiscalManager() {
         URL endpoint;
-        URL api;
-        //URL webService;
         try {
             String sdkAppId = getResources().getString(R.string.sdkAppId);    //si da error al compilar dejar variable sdkAppId= ""
-            api = new URL(" http://34.212.218.149:8080/api/");
             FiscalManager result = FiscalManager.getInstance();
             if (rbFirst.isChecked()) {
                 result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).firstGen(FirstGenerationPrinterModel.P441_201, sdkAppId).build());
@@ -289,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).secondGen(loc, sdkAppId).build());
             } else if (rbElectronic.isChecked()) {
-                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).electronicInvoice(api, "EmpresaPrueba", sdkAppId).build());
+                result.setup(FiscalManagerConfigurationBuilder.configure(getApplicationContext()).electronicInvoice("EmpresaPrueba", sdkAppId).build());
             }
 
         } catch (MalformedURLException e) {
@@ -1190,7 +1187,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void FE_Register_Company() {
         ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30522211563", "AND",
-                new Subsidiary("sucursal_prueba", "32"),
+                new Subsidiary("sucursal_prueba", "33"),
                 new PointOfSales(true, 12, "CAE"),
                 new Checkout("123ABC", new PointOfSales(true, 12, "CAE"), 32, null),
                 false);
