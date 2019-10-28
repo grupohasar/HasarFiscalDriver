@@ -1,31 +1,3 @@
-VERSION 0.6.0
-Se elimina test PUT PosNumber. Se reemplazo boolean en metodo newCompany();
-Se modifico electronicInvoiceFactory.newCompany("30522211563", "PRUEBA",
-                new Subsidiary("sucursal_prueba", "32"),
-                new PointOfSales(true, 12, "CAE"),
-                new Checkout("123ABC", new PointOfSales(true, 12, "CAE"), 32, null),
-                false);
-Se agrega nuevo parametro boolean a newCompany(), este controla el impacto al servidor para create y put.
-Se modifico electronicInvoice(api, "EmpresaPrueba", sdkAppId)
-    Ya no se le pasa usuario y clave de la api.
-Se agrega Test FP_Factura_C(). Este funciona solo con configuracion de impresora Monotributista.
-
-VERSION 0.5.0
-Se agrega numero de version en la aplicacion.
-Modificacion de Checkout("ABC123", new PointOfSales(true, 11, "CAE"), 2, null))
-    Ahora admite valor alfanumerico en checkoutNumber.
-    Devuelve mensaje detallado en caso de error en electronicInvoiceRegisterCompanyResponse.getStatus()
-Se modifico ElectronicInvoiceACKBean
-    electronicInvoiceFactory.newElectronicInvoiceACK("1", 1, lastTransactionNumber, "30618829150")
-    Retorna Boolean. Previamente realizar factura electronica para obtener lastTransactionNumber.
-Se agrega metodo boolean putPosNumber(int number)
-    Por ahora dummy retorna true.
-
-VERSION 0.4.25
-Modificaciones en el SDK para que no permita crear empresas repetidas. Lo mismo para sucursales, puntos de venta y cajas.
-Se modificaron los test del Sandbox para que todos muestren un mensaje de error en el caso que existan.
-Se creo nuevo test de Register Company con datos válidos para la prueba.
-
 VERSION 0.4.24
 Se agregó un control que valida que ambas versiones(SDK y .aar) tengan la misma versión.
 En caso de no coincidir arrojará un mensaje para indicar actualizar las mismas.
