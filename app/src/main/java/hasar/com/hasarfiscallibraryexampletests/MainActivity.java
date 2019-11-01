@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     //Data for testing
 
     private ElectronicInvoiceFactory electronicInvoiceFactory = new ElectronicInvoiceFactory(1,
-            "1",
+            "123ABC", //123ABC //1692688814,
             12,
             documentFactory.newCUIT("30618829150"));
 
@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         final Spinner dropdown = findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.command_array, android.R.layout.simple_spinner_dropdown_item);
+        dropdown.setAdapter(adapter);
         dropdown.setAdapter(adapter);
 
         txtIp = findViewById(R.id.txtIp);
@@ -657,6 +658,21 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG)
                                 .show();
                         lastTransactionNumber = response.getTransactionNumber();
+
+                        //SIEMPRE MANDAR UN ACK LUEGO DE UNA FE!
+                        ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 1, lastTransactionNumber, "30618829150");
+                        FiscalManager.getInstance().electronicInvoiceACK(beanACK, new ServiceCallback<Boolean>() {
+                            @Override
+                            public void onResult(Boolean response) {
+                                Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onError(FiscalDriverException ex) {
+                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
                     }
 
                     @Override
@@ -690,19 +706,19 @@ public class MainActivity extends AppCompatActivity {
             public void onResult(ElectronicInvoiceResponse response) {
                 lastTransactionNumber = response.getTransactionNumber();
 
-                ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("1", 1, lastTransactionNumber, "30618829150");
+                ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 1, lastTransactionNumber, "30618829150");
                 FiscalManager.getInstance().electronicInvoiceACK(beanACK, new ServiceCallback<Boolean>() {
-                    @Override
-                    public void onResult(Boolean response) {
-                        Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
-                    }
+                @Override
+                public void onResult(Boolean response) {
+                    Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
+                }
 
-                    @Override
-                    public void onError(FiscalDriverException ex) {
-                        Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+                @Override
+                public void onError(FiscalDriverException ex) {
+                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
             @Override
             public void onError(FiscalDriverException e) {
@@ -1186,11 +1202,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void FE_Register_Company() {
-        ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30522211563", "AND",
-                new Subsidiary("sucursal_prueba", "33"),
-                new PointOfSales(true, 12, "CAE"),
-                new Checkout("123ABC", new PointOfSales(true, 12, "CAE"), 32, null),
-                false);
+        ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30618829150", "AND",
+                new Subsidiary("sucursal_prueba", "6"),
+                new PointOfSales(true, 15, "CAE"),
+                new Checkout("1234ABC", new PointOfSales(true, 15, "CAE"), 6, null),
+                true);
 
         FiscalManager.getInstance().electronicInvoiceRegisterCompany(company, new ToastOnExceptionServiceCallback<ElectronicInvoiceRegisterCompanyResponse>(getApplicationContext()) {
             @Override
