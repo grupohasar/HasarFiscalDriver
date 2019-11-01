@@ -9,6 +9,9 @@ Se agrega nuevo parametro boolean a newCompany(), este controla el impacto al se
 Se modifico electronicInvoice(api, "EmpresaPrueba", sdkAppId)
     Ya no se le pasa usuario y clave de la api.
 Se agrega Test FP_Factura_C(). Este funciona solo con configuracion de impresora Monotributista.
+Se revierte Toast de FiscalDriverException por pedido del cliente
+Se elimina parametro, electronicInvoice("Empresa", sdkAppId)
+Se agrega ACK a test FE_FACTURA_B.
 
 VERSION 0.5.0
 Se agrega numero de version en la aplicacion.
