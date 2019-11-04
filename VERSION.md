@@ -12,6 +12,7 @@ Se agrega Test FP_Factura_C(). Este funciona solo con configuracion de impresora
 Se revierte Toast de FiscalDriverException por pedido del cliente
 Se elimina parametro, electronicInvoice("Empresa", sdkAppId)
 Se agrega ACK a test FE_FACTURA_B.
+Se controla punto de venta sólo por cuit y tipo de punto de venta, debido a una limitacion de la API FE.
 
 VERSION 0.5.0
 Se agrega numero de version en la aplicacion.
