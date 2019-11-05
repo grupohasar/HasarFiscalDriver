@@ -1,5 +1,6 @@
 <resources>
     <string-array name="command_array">
+        <item>Factura Electronica A </item>
         <item>Factura Electronica B </item>
         <item>FE_ACK</item>
         <item>Percepcion Factura A  </item>
