@@ -630,9 +630,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void FE_Factura_A() {
         electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
-                "123ABC", //123ABC //88814,
+                "123ABC", //88814,
                 3,
-                documentFactory.newCUIT("30522211563"), "13112019100311");
+                documentFactory.newCUIT("30522211563"));
 
         InvoiceBean bean = new InvoiceBean();
         bean.setInvoiceType(InvoiceTypes.FACTURA_A);
@@ -655,8 +655,6 @@ public class MainActivity extends AppCompatActivity {
                         builder.append("Detalle Error: " + response.getErrorDetail());
                         builder.append('\n');
                         builder.append("T.Number: " + response.getTransactionNumber());
-                        builder.append('\n');
-                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
                         builder.append('\n');
                         builder.append("CAE: " + response.getCae());
                         builder.append('\n');
@@ -699,9 +697,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void FE_Factura_B() {
         electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
-                "123ABC", //123ABC //88814,
+                "123ABC", //88814,
                 3,
-                documentFactory.newCUIT("30522211563"), "13112019095914");
+                documentFactory.newCUIT("30522211563"));
 
         InvoiceBean bean = new InvoiceBean();
 
@@ -728,8 +726,6 @@ public class MainActivity extends AppCompatActivity {
                         builder.append("Detalle Error: " + response.getErrorDetail());
                         builder.append('\n');
                         builder.append("T.Number: " + response.getTransactionNumber());
-                        builder.append('\n');
-                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
                         builder.append('\n');
                         builder.append("CAE: " + response.getCae());
                         builder.append('\n');
@@ -773,7 +769,7 @@ public class MainActivity extends AppCompatActivity {
         electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
                 "123ABC", //88814,
                 3,
-                documentFactory.newCUIT("30522211563"), "13112019100400");
+                documentFactory.newCUIT("30522211563"));
 
 
         InvoiceBean bean = new InvoiceBean();
@@ -793,8 +789,6 @@ public class MainActivity extends AppCompatActivity {
                         builder.append("Detalle Error: " + response.getErrorDetail());
                         builder.append('\n');
                         builder.append("T.Number: " + response.getTransactionNumber());
-                        builder.append('\n');
-                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
                         builder.append('\n');
                         builder.append("CAE: " + response.getCae());
                         builder.append('\n');
@@ -835,9 +829,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void FE_Register_Company() {
         electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
-                "123ABC", //123ABC //88814,
+                "123ABC", //88814,
                 3,
-                documentFactory.newCUIT("30522211563"), "0");
+                documentFactory.newCUIT("30522211563"));
 
         PointOfSales pos = new PointOfSales(true, 3, "CAE");
 
@@ -872,11 +866,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void FE_ACK() { //CREO UNA FE PARA QUE ME DEVUELVA EL ULTIMO NUMERO DE TRANSACCION Y PASARSELO AL ACK
         electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
-                "123ABC", //123ABC //88814,
+                "123ABC", //88814,
                 3,
-                documentFactory.newCUIT("30522211563"), "0");
-        //transaccionConfirmedNumber: LA PRRIMERA VEZ VA EN 0,
-        // SI SE QUIERE REPETIR EL CBTE SE ENVIA CON EL NUMERO DE TRANSACCION CONFIRMADO QUE ES EL lastTransactionNumber LUEGO DE HABER PASADO POR EL ACK TRUE
+                documentFactory.newCUIT("30522211563"));
 
         InvoiceBean bean = new InvoiceBean();
 
@@ -1026,9 +1018,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
-                        "123ABC", //123ABC //88814,
+                        "123ABC", //88814,
                         3,
-                        documentFactory.newCUIT("30522211563"), "0");
+                        documentFactory.newCUIT("30522211563"));
                 ElectronicInvoiceBean electronicInvoiceBean = electronicInvoiceFactory.newElectronicInvoice(bean);
                 FiscalManager.getInstance().electronicInvoice(electronicInvoiceBean, new ToastOnExceptionServiceCallback<ElectronicInvoiceResponse>(getApplicationContext()) {
                     @Override
@@ -1039,8 +1031,6 @@ public class MainActivity extends AppCompatActivity {
                         builder.append("Detalle Error: " + response.getErrorDetail());
                         builder.append('\n');
                         builder.append("T.Number: " + response.getTransactionNumber());
-                        builder.append('\n');
-                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
                         builder.append('\n');
                         builder.append("CAE: " + response.getCae());
                         builder.append('\n');
@@ -1114,9 +1104,9 @@ public class MainActivity extends AppCompatActivity {
                     bean.setTributes(tributesToPrint);
                 }
                 electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
-                        "123ABC", //123ABC //88814,
+                        "123ABC", //88814,
                         3,
-                        documentFactory.newCUIT("30522211563"), "0");
+                        documentFactory.newCUIT("30522211563"));
                 ElectronicInvoiceBean electronicInvoiceBean = electronicInvoiceFactory.newElectronicInvoice(bean);
                 //Finally, send the invoice to the fiscal printer.
                 FiscalManager.getInstance().electronicInvoice(electronicInvoiceBean, new ToastOnExceptionServiceCallback<ElectronicInvoiceResponse>(getApplicationContext()) {
@@ -1128,8 +1118,6 @@ public class MainActivity extends AppCompatActivity {
                         builder.append("Detalle Error: " + response.getErrorDetail());
                         builder.append('\n');
                         builder.append("T.Number: " + response.getTransactionNumber());
-                        builder.append('\n');
-                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
                         builder.append('\n');
                         builder.append("CAE: " + response.getCae());
                         builder.append('\n');
