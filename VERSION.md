@@ -1,3 +1,12 @@
+VERSION 0.7.0
+Se agrega nuevo parametro a ElectronicInvoiceFactory(99,
+                                "123ABC",
+                                3,
+                                documentFactory.newCUIT("30522211563"), "13112019100400");
+Es el ultimo numero de transaccion confirmado. Al emitir una factura electronica se devuelve el numero de transaccion, si este es confirmado luego de enviar un ACK, debe ser pasado como parametro en la siguiente factura.
+Se agrega metodo getTransactionConfirmedNumber() y getErrorDetail() a ElectronicInvoiceResponse.
+Se agrega test para factura C
+
 VERSION 0.6.0
 Se elimina test PUT PosNumber. Se reemplazo boolean en metodo newCompany();
 Se modifico electronicInvoiceFactory.newCompany("30522211563", "PRUEBA",

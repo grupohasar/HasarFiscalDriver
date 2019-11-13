@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     private DocumentFactory documentFactory = new DocumentFactory();
     private FiscalPaymentFactory fiscalPaymentFactory = new FiscalPaymentFactory();
     private DiscountsFactory discountsFactory = new DiscountsFactory("Discount: ");
-    private String lastTransactionNumber = "";
+    private String lastTransactionNumber = "0";
     private InscripcionIIBBFactory inscripcionIIBBFactory = new InscripcionIIBBFactory();
     private Tributes tributes;
     private TaxExceptionFactory taxExceptionFactory = new TaxExceptionFactory();
@@ -123,10 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Data for testing
 
-    private ElectronicInvoiceFactory electronicInvoiceFactory = new ElectronicInvoiceFactory(1,
-            "123ABC", //123ABC //88814,
-            15,
-            documentFactory.newCUIT("30618829150"));
+    private ElectronicInvoiceFactory electronicInvoiceFactory;
 
     private EditText txtIp;
     private Button btnSend;
@@ -152,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
         txtVersion.setText("VERSION: " + versionLibrary);
 
         final Spinner dropdown = findViewById(R.id.spinner1);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.command_array, android.R.layout.simple_spinner_dropdown_item);
-        dropdown.setAdapter(adapter);
+
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.command_array, android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
 
         txtIp = findViewById(R.id.txtIp);
@@ -188,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
                 initFiscalManager();
 
+
                 switch (dropdown.getSelectedItemPosition()) {
                     case 0:
                         FE_Factura_A();
@@ -196,62 +194,66 @@ public class MainActivity extends AppCompatActivity {
                         FE_Factura_B();
                         break;
                     case 2:
-                        FE_ACK();
+                        FE_Factura_C();
                         break;
                     case 3:
-                        Percepcion_Factura_A();
+                        FE_ACK();
                         break;
                     case 4:
-                        Percepcion_Factura_A_02();
+                        Percepcion_Factura_A();
                         break;
                     case 5:
-                        FE_Afip_Is_Alive();
+                        Percepcion_Factura_A_02();
                         break;
                     case 6:
-                        FE_Register_Company();
+                        FE_Afip_Is_Alive();
                         break;
                     case 7:
-                        FP_FACTURA_A();
+                        FE_Register_Company();
                         break;
                     case 8:
-                        FP_Factura_B();
+                        FP_FACTURA_A();
                         break;
                     case 9:
-                        FP_Factura_C();
+                        FP_Factura_B();
+                        break;
                     case 10:
-                        Header_Factura_A();
+                        FP_Factura_C();
                         break;
                     case 11:
-                        Header_Factura_B();
+                        Header_Factura_A();
                         break;
                     case 12:
-                        Header_No_Fiscal();
+                        Header_Factura_B();
                         break;
                     case 13:
-                        Tipo_Habilitacion('A');
+                        Header_No_Fiscal();
                         break;
                     case 14:
-                        Tipo_Habilitacion('L');
+                        Tipo_Habilitacion('A');
                         break;
                     case 15:
-                        Tipo_Habilitacion('M');
+                        Tipo_Habilitacion('L');
                         break;
                     case 16:
-                        FP_Cliente_No_Categorizado();
+                        Tipo_Habilitacion('M');
                         break;
                     case 17:
-                        Medios_De_Pago(4);
+                        FP_Cliente_No_Categorizado();
                         break;
                     case 18:
-                        Medios_De_Pago(5);
+                        Medios_De_Pago(4);
                         break;
                     case 19:
-                        Medios_De_Pago(6);
+                        Medios_De_Pago(5);
                         break;
                     case 20:
-                        Cierre_Z();
+                        Medios_De_Pago(6);
                         break;
                     case 21:
+                        Cierre_Z();
+                        break;
+                    case 22:
                         Cancelar();
                         break;
                 }
@@ -627,6 +629,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void FE_Factura_A() {
+        electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
+                "123ABC", //123ABC //88814,
+                3,
+                documentFactory.newCUIT("30522211563"), "13112019100311");
+
         InvoiceBean bean = new InvoiceBean();
         bean.setInvoiceType(InvoiceTypes.FACTURA_A);
         bean.setClient(
@@ -643,9 +650,15 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResult(ElectronicInvoiceResponse response) {
                         StringBuilder builder = new StringBuilder();
-                        builder.append("CAE: " + response.getCae());
+                        builder.append("STATUS: " + response.getStatus());
+                        builder.append('\n');
+                        builder.append("Detalle Error: " + response.getErrorDetail());
                         builder.append('\n');
                         builder.append("T.Number: " + response.getTransactionNumber());
+                        builder.append('\n');
+                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
+                        builder.append('\n');
+                        builder.append("CAE: " + response.getCae());
                         builder.append('\n');
                         builder.append("Total: " + response.getTotal());
                         builder.append('\n');
@@ -658,16 +671,16 @@ public class MainActivity extends AppCompatActivity {
                         lastTransactionNumber = response.getTransactionNumber();
 
                         //SIEMPRE MANDAR UN ACK LUEGO DE UNA FE!
-                        ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 1, lastTransactionNumber, "30618829150");
+                        ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 99, lastTransactionNumber, "30522211563");
                         FiscalManager.getInstance().electronicInvoiceACK(beanACK, new ServiceCallback<Boolean>() {
                             @Override
                             public void onResult(Boolean response) {
-                               // Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
+                                // Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onError(FiscalDriverException ex) {
-                               // Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                                // Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
 
@@ -684,20 +697,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void FE_Factura_B() {      //    testElectronicInvoice01
+    private void FE_Factura_B() {
+        electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
+                "123ABC", //123ABC //88814,
+                3,
+                documentFactory.newCUIT("30522211563"), "13112019095914");
+
         InvoiceBean bean = new InvoiceBean();
 
-        bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
-        bean.setClient(
+        bean.setInvoiceType(InvoiceTypes.FACTURA_B);
+        /*bean.setClient(
                 clientFactory.newConsumidorFinal(
                         "PRUEBA_AND",
                         "CalleSiempreVivas 666",
-                        documentFactory.newNinguno(null)));
+                        documentFactory.newNinguno(null)));*/
+
+        //bean.setEmptyClient();
 
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Leche", "103", 45.50).quantity(1).iva(ivaRegistry.get("Gravado0")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Frutilla", "104", 130.00).quantity(1).iva(ivaRegistry.get("Gravado10.5")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 35.70).quantity(1).iva(ivaRegistry.get("Gravado21")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite 2250", "106", 69.80).quantity(1).iva(ivaRegistry.get("Gravado21")).internalTax(internalTaxesFactory.newFixedTax(2.59)));
 
         ElectronicInvoiceBean electronicInvoiceBean = electronicInvoiceFactory.newElectronicInvoice(bean);
         //Finally, send the invoice to the fiscal printer.
@@ -705,9 +723,15 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResult(ElectronicInvoiceResponse response) {
                         StringBuilder builder = new StringBuilder();
-                        builder.append("CAE: " + response.getCae());
+                        builder.append("STATUS: " + response.getStatus());
+                        builder.append('\n');
+                        builder.append("Detalle Error: " + response.getErrorDetail());
                         builder.append('\n');
                         builder.append("T.Number: " + response.getTransactionNumber());
+                        builder.append('\n');
+                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
+                        builder.append('\n');
+                        builder.append("CAE: " + response.getCae());
                         builder.append('\n');
                         builder.append("Total: " + response.getTotal());
                         builder.append('\n');
@@ -720,7 +744,7 @@ public class MainActivity extends AppCompatActivity {
                         lastTransactionNumber = response.getTransactionNumber();
 
                         //SIEMPRE MANDAR UN ACK LUEGO DE UNA FE!
-                        ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 5, lastTransactionNumber, "30618829150");
+                        ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 99, lastTransactionNumber, "30522211563");
                         FiscalManager.getInstance().electronicInvoiceACK(beanACK, new ServiceCallback<Boolean>() {
                             @Override
                             public void onResult(Boolean response) {
@@ -745,8 +769,115 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void FE_Factura_C() {
+        electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
+                "123ABC", //88814,
+                3,
+                documentFactory.newCUIT("30522211563"), "13112019100400");
+
+
+        InvoiceBean bean = new InvoiceBean();
+
+        bean.setInvoiceType(InvoiceTypes.FACTURA_C);
+
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Leche", "103", 00.50).quantity(1).iva(ivaRegistry.get("Gravado0")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Frutilla", "104", 00.00).quantity(1).iva(ivaRegistry.get("Gravado10.5")));
+        ElectronicInvoiceBean electronicInvoiceBean = electronicInvoiceFactory.newElectronicInvoice(bean);
+
+        FiscalManager.getInstance().electronicInvoice(electronicInvoiceBean, new ToastOnExceptionServiceCallback<ElectronicInvoiceResponse>(getApplicationContext()) {
+                    @Override
+                    public void onResult(ElectronicInvoiceResponse response) {
+                        StringBuilder builder = new StringBuilder();
+                        builder.append("STATUS: " + response.getStatus());
+                        builder.append('\n');
+                        builder.append("Detalle Error: " + response.getErrorDetail());
+                        builder.append('\n');
+                        builder.append("T.Number: " + response.getTransactionNumber());
+                        builder.append('\n');
+                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
+                        builder.append('\n');
+                        builder.append("CAE: " + response.getCae());
+                        builder.append('\n');
+                        builder.append("Total: " + response.getTotal());
+                        builder.append('\n');
+                        builder.append("Total IVA: " + response.getIVA());
+                        builder.append('\n');
+                        Toast.makeText(getApplicationContext(),
+                                builder.toString(),
+                                Toast.LENGTH_LONG)
+                                .show();
+                        lastTransactionNumber = response.getTransactionNumber();
+
+                        //SIEMPRE MANDAR UN ACK LUEGO DE UNA FE!
+                        ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 99, lastTransactionNumber, "30522211563");
+                        FiscalManager.getInstance().electronicInvoiceACK(beanACK, new ServiceCallback<Boolean>() {
+                            @Override
+                            public void onResult(Boolean response) {
+                                //Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onError(FiscalDriverException ex) {
+                                //Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onError(FiscalDriverException e) {
+                        super.onError(e);
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+
+    private void FE_Register_Company() {
+        electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
+                "123ABC", //123ABC //88814,
+                3,
+                documentFactory.newCUIT("30522211563"), "0");
+
+        PointOfSales pos = new PointOfSales(true, 3, "CAE");
+
+        ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30522211563", "AND",
+                new Subsidiary("sucursal_prueba", "99"),
+                pos,
+                new Checkout("123ABC", pos, 99, "0"),
+                false);
+
+        FiscalManager.getInstance().electronicInvoiceRegisterCompany(company, new ToastOnExceptionServiceCallback<ElectronicInvoiceRegisterCompanyResponse>(getApplicationContext()) {
+            @Override
+            public void onResult(ElectronicInvoiceRegisterCompanyResponse resp) {
+                StringBuilder builder = new StringBuilder();
+                builder.append("STATUS: " + resp.getStatus());
+                builder.append('\n');
+                builder.append("ERROR: " + resp.getError());
+                builder.append('\n');
+                builder.append("DATO: " + resp.getExistingId());
+                builder.append('\n');
+                builder.append("ERROR TYPE: " + resp.getRegisterCompanyErrorType());
+                builder.append('\n');
+                Toast.makeText(getApplicationContext(), builder.toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(FiscalDriverException e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
 
     private void FE_ACK() { //CREO UNA FE PARA QUE ME DEVUELVA EL ULTIMO NUMERO DE TRANSACCION Y PASARSELO AL ACK
+        electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
+                "123ABC", //123ABC //88814,
+                3,
+                documentFactory.newCUIT("30522211563"), "0");
+        //transaccionConfirmedNumber: LA PRRIMERA VEZ VA EN 0,
+        // SI SE QUIERE REPETIR EL CBTE SE ENVIA CON EL NUMERO DE TRANSACCION CONFIRMADO QUE ES EL lastTransactionNumber LUEGO DE HABER PASADO POR EL ACK TRUE
+
         InvoiceBean bean = new InvoiceBean();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
@@ -766,19 +897,19 @@ public class MainActivity extends AppCompatActivity {
             public void onResult(ElectronicInvoiceResponse response) {
                 lastTransactionNumber = response.getTransactionNumber();
 
-                ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 1, lastTransactionNumber, "30618829150");
+                ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 99, lastTransactionNumber, "30522211563");
                 FiscalManager.getInstance().electronicInvoiceACK(beanACK, new ServiceCallback<Boolean>() {
-                @Override
-                public void onResult(Boolean response) {
-                    Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
-                }
+                    @Override
+                    public void onResult(Boolean response) {
+                        Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
+                    }
 
-                @Override
-                public void onError(FiscalDriverException ex) {
-                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-        }
+                    @Override
+                    public void onError(FiscalDriverException ex) {
+                        Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
 
             @Override
             public void onError(FiscalDriverException e) {
@@ -787,7 +918,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void FP_Factura_B() {      //  testElectronicInvoice02
         InvoiceBean bean = new InvoiceBean();
@@ -850,8 +980,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-
-    private void Percepcion_Factura_A() {       //testElectronicInvoice05
+    private void Percepcion_Factura_A() {
         InvoiceBean bean = new InvoiceBean();
         //Set the invoice type with the InvoiceTypes enumeration.
         List<InscripcionIIBB> InscripcionIIBBList = new ArrayList<InscripcionIIBB>();
@@ -882,6 +1011,8 @@ public class MainActivity extends AppCompatActivity {
         FiscalManager.getInstance().perceptions(bean, new ToastOnExceptionServiceCallback<PerceptionResponse>(getApplicationContext()) {
             @Override
             public void onResult(PerceptionResponse perceptionResponse) {
+                Toast.makeText(getApplicationContext(), perceptionResponse.getPerceptionList().toString(), Toast.LENGTH_LONG).show();
+
                 List<Perception> perceptionList;
                 perceptionList = perceptionResponse.getPerceptionList();
 
@@ -893,17 +1024,25 @@ public class MainActivity extends AppCompatActivity {
                     }
                     bean.setTributes(tributesToPrint);
                 }
+
+                electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
+                        "123ABC", //123ABC //88814,
+                        3,
+                        documentFactory.newCUIT("30522211563"), "0");
                 ElectronicInvoiceBean electronicInvoiceBean = electronicInvoiceFactory.newElectronicInvoice(bean);
-
-
-                //Finally, send the invoice to the fiscal printer.
                 FiscalManager.getInstance().electronicInvoice(electronicInvoiceBean, new ToastOnExceptionServiceCallback<ElectronicInvoiceResponse>(getApplicationContext()) {
                     @Override
                     public void onResult(ElectronicInvoiceResponse response) {
                         StringBuilder builder = new StringBuilder();
-                        builder.append("CAE: " + response.getCae());
+                        builder.append("STATUS: " + response.getStatus());
+                        builder.append('\n');
+                        builder.append("Detalle Error: " + response.getErrorDetail());
                         builder.append('\n');
                         builder.append("T.Number: " + response.getTransactionNumber());
+                        builder.append('\n');
+                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
+                        builder.append('\n');
+                        builder.append("CAE: " + response.getCae());
                         builder.append('\n');
                         builder.append("Total: " + response.getTotal());
                         builder.append('\n');
@@ -974,15 +1113,25 @@ public class MainActivity extends AppCompatActivity {
                     }
                     bean.setTributes(tributesToPrint);
                 }
+                electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
+                        "123ABC", //123ABC //88814,
+                        3,
+                        documentFactory.newCUIT("30522211563"), "0");
                 ElectronicInvoiceBean electronicInvoiceBean = electronicInvoiceFactory.newElectronicInvoice(bean);
                 //Finally, send the invoice to the fiscal printer.
                 FiscalManager.getInstance().electronicInvoice(electronicInvoiceBean, new ToastOnExceptionServiceCallback<ElectronicInvoiceResponse>(getApplicationContext()) {
                     @Override
                     public void onResult(ElectronicInvoiceResponse response) {
                         StringBuilder builder = new StringBuilder();
-                        builder.append("CAE: " + response.getCae());
+                        builder.append("STATUS: " + response.getStatus());
+                        builder.append('\n');
+                        builder.append("Detalle Error: " + response.getErrorDetail());
                         builder.append('\n');
                         builder.append("T.Number: " + response.getTransactionNumber());
+                        builder.append('\n');
+                        builder.append("T.Confirmed Number: " + response.getTransactionConfirmedNumber());
+                        builder.append('\n');
+                        builder.append("CAE: " + response.getCae());
                         builder.append('\n');
                         builder.append("Total: " + response.getTotal());
                         builder.append('\n');
@@ -1053,6 +1202,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     bean.setTributes(tributesToPrint);
                 }
+                        electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
+                "123ABC", //123ABC //88814,
+                3,
+                documentFactory.newCUIT("30522211563"), "0");
                 ElectronicInvoiceBean electronicInvoiceBean = electronicInvoiceFactory.newElectronicInvoice(bean);
                 //Finally, send the invoice to the fiscal printer.
                 FiscalManager.getInstance().electronicInvoice(electronicInvoiceBean, new ToastOnExceptionServiceCallback<ElectronicInvoiceResponse>(getApplicationContext()) {
@@ -1228,6 +1381,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*private void FE_Query() {     //    testElectronicInvoiceQuery
+            electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
+                "123ABC", //123ABC //88814,
+                3,
+                documentFactory.newCUIT("30522211563"), "0");
+
         if (lastTransactionNumber.isEmpty()) {
             Toast.makeText(getApplicationContext(), "You must create a electronic invoice", Toast.LENGTH_SHORT).show();
             return;
@@ -1259,38 +1417,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    private void FE_Register_Company() {
-        PointOfSales pos = new PointOfSales(true, 15, "CAE");
-
-        ElectronicInvoicerRegisterCompanyBean company = electronicInvoiceFactory.newCompany("30618829150", "AND",
-                new Subsidiary("sucursal_prueba", "5"),
-                pos,
-                new Checkout("123ABC", pos, 5, null),
-                false);
-
-        FiscalManager.getInstance().electronicInvoiceRegisterCompany(company, new ToastOnExceptionServiceCallback<ElectronicInvoiceRegisterCompanyResponse>(getApplicationContext()) {
-            @Override
-            public void onResult(ElectronicInvoiceRegisterCompanyResponse resp) {
-                StringBuilder builder = new StringBuilder();
-                builder.append("STATUS: " + resp.getStatus());
-                builder.append('\n');
-                builder.append("ERROR: " + resp.getError());
-                builder.append('\n');
-                builder.append("DATO: " + resp.getExistingId());
-                builder.append('\n');
-                builder.append("ERROR TYPE: " + resp.getRegisterCompanyErrorType());
-                builder.append('\n');
-                Toast.makeText(getApplicationContext(), builder.toString(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onError(FiscalDriverException e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
     }
 
     private void Header_No_Fiscal() {   //  testLinesZone_Ticket_No_Fiscal
