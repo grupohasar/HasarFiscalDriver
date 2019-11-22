@@ -1,3 +1,6 @@
+VERSION 0.8.0
+Se corrigio error que no permitia realizar facturas en 2da generacion por red
+
 VERSION 0.7.0
 Se agrega metodo getErrorDetail() a ElectronicInvoiceResponse.
 Se agrega test para factura C
