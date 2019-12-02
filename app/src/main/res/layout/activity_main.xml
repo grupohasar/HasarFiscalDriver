@@ -126,6 +126,30 @@
             app:layout_constraintRight_toRightOf="parent" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/json"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llButton"
+        android:orientation="vertical"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp">
+
+        <EditText
+            android:id="@+id/txtJson"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:enabled="true"
+            android:gravity="left"
+            android:hint="Json"
+            android:inputType="textMultiLine"
+            android:lines="13"
+            android:maxLines="2000000"
+            android:singleLine="false" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/factura_desconectar"
         android:layout_width="wrap_content"
