@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                         FP_FACTURA_A();
                         break;
                     case 9:
-                        FP_Factura_B_TIQUE();
+                        FP_Factura_B();
                         break;
                     case 10:
                         FP_NDC_B();
@@ -256,42 +256,45 @@ public class MainActivity extends AppCompatActivity {
                         FP_Factura_C();
                         break;
                     case 12:
-                        Header_Factura_A();
+                        FP_TIQUE();
                         break;
                     case 13:
-                        Header_Factura_B();
+                        Header_Factura_A();
                         break;
                     case 14:
-                        Header_No_Fiscal();
+                        Header_Factura_B();
                         break;
                     case 15:
-                        Tipo_Habilitacion('A');
+                        Header_No_Fiscal();
                         break;
                     case 16:
-                        Tipo_Habilitacion('L');
+                        Tipo_Habilitacion('A');
                         break;
                     case 17:
-                        Tipo_Habilitacion('M');
+                        Tipo_Habilitacion('L');
                         break;
                     case 18:
-                        FP_Cliente_No_Categorizado();
+                        Tipo_Habilitacion('M');
                         break;
                     case 19:
-                        Medios_De_Pago(4);
+                        FP_Cliente_No_Categorizado();
                         break;
                     case 20:
-                        Medios_De_Pago(5);
+                        Medios_De_Pago(4);
                         break;
                     case 21:
+                        Medios_De_Pago(5);
+                        break;
+                    case 22:
                         Medios_De_Pago(6);
                         break;
                     //case 22:
-                      //  FE_Factura_B_Json();
-                        //break;
-                    case 22:
+                    //  FE_Factura_B_Json();
+                    //break;
+                    case 23:
                         Cierre_Z();
                         break;
-                    case 23:
+                    case 24:
                         Cancelar();
                         break;
                 }
@@ -950,10 +953,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void FP_Factura_B_TIQUE() {
+    private void FP_Factura_B() {
         InvoiceBean bean = new InvoiceBean();
 
-        bean.setInvoiceType(InvoiceTypes.TIQUE);
+        bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
         bean.setClient(
                 clientFactory.newConsumidorFinal(
                         "PRUEBA_AND",
@@ -989,7 +992,7 @@ public class MainActivity extends AppCompatActivity {
     private void FP_NDC_B() {
         InvoiceBean bean = new InvoiceBean();
 
-        bean.setInvoiceType(InvoiceTypes.NOTA_DE_CREDITO_B);
+        bean.setInvoiceType(InvoiceTypes.TIQUE_NOTA_CREDITO_B);
         bean.setClient(
                 clientFactory.newConsumidorFinal(
                         "PRUEBA_AND",
@@ -1288,7 +1291,7 @@ public class MainActivity extends AppCompatActivity {
         //Instantiate a InvoiceBean, to define an Invoice
         InvoiceBean bean = new InvoiceBean();
         //Set the invoice type with the InvoiceTypes enumeration.
-        bean.setInvoiceType(InvoiceTypes.FACTURA_A);
+        bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_A);
 
         bean.setClient(
                 clientFactory.newResponsableInscripto(
@@ -1783,4 +1786,42 @@ public class MainActivity extends AppCompatActivity {
 
         );
     }
+
+    private void FP_TIQUE() {
+        InvoiceBean bean = new InvoiceBean();
+
+        bean.setInvoiceType(InvoiceTypes.TIQUE);
+        bean.setClient(
+                clientFactory.newConsumidorFinal(
+                        "PRUEBA_AND",
+                        "CalleSiempreVivas 666",
+                        documentFactory.newDNI("34849766")));
+
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 35.72).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
+
+        FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
+                    @Override
+                    public void onResult(InvoiceResponse response) {
+                        executePayment(10000);
+                        response.setRoundAdjustment(5);
+                        double redondeo = response.getRoundAdjustment();
+
+                        StringBuilder builder = new StringBuilder();
+                        builder.append("Factura B OK");
+                        builder.append("Get redondeo: " + ((int) redondeo));
+                        Toast.makeText(getApplicationContext(), builder, Toast.LENGTH_LONG).show();
+                    }
+
+
+                    @Override
+                    public void onError(FiscalDriverException e) {
+                        super.onError(e);
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+
+
 }

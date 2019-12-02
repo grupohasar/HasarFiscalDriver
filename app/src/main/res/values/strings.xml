@@ -9,9 +9,10 @@
         <item>AFIP </item>
         <item>Register Company</item>
         <item>Factura A </item>
-        <item>Factura B (TIQUE)</item>
+        <item>Factura B </item>
         <item>Nota de Credito B</item>
         <item>Factura C </item>
+        <item>FP_TIQUE </item>
         <item>Header Factura A </item>
         <item>Header Factura B </item>
         <item>Header No Fiscal</item>
