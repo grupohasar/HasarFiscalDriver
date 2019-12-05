@@ -25,6 +25,7 @@
         <item>6 Medios de Pago </item>
         <item>Cierre Z</item>
         <item>Cancelar</item>
+        <item>Json test FP</item>
     </string-array>
     <string name="app_name">HasarFiscalLibraryExampleTests</string>
     <string name="lbl_IP">Ip</string>

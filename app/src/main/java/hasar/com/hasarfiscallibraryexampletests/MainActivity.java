@@ -1,16 +1,9 @@
 package hasar.com.hasarfiscallibraryexampletests;
 
-import android.content.Context;
-import android.content.Intent;
+import android.app.FragmentManager;
 import android.graphics.Color;
-import android.media.session.MediaSession;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Environment;
-import android.os.Handler;
-import android.renderscript.RenderScript;
-import android.support.annotation.NonNull;
-import android.support.constraint.solver.widgets.Rectangle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,22 +13,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
-import com.hasar.fiscal.dataLayer.beans.AssociatedDocumentBean;
 import com.hasar.fiscal.dataLayer.beans.Checkout;
-import com.hasar.fiscal.dataLayer.beans.Currency;
-import com.hasar.fiscal.dataLayer.beans.Discounts;
 import com.hasar.fiscal.dataLayer.beans.InscripcionIIBB;
 import com.hasar.fiscal.dataLayer.beans.JurisdictionMapper;
 import com.hasar.fiscal.dataLayer.beans.Perception;
@@ -48,42 +32,27 @@ import com.hasar.fiscal.dataLayer.beans.Tributes;
 import com.hasar.fiscal.dataLayer.beans.TributesModeMapper;
 import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoiceACKBean;
 import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoicerRegisterCompanyBean;
-import com.hasar.fiscal.dataLayer.beans.response.ElectronicInvoiceACKResponse;
 import com.hasar.fiscal.dataLayer.beans.response.ElectronicInvoiceRegisterCompanyResponse;
 import com.hasar.fiscal.dataLayer.beans.response.RespuestaDatosInicializacion;
 import com.hasar.fiscal.dataLayer.beans.response.PerceptionResponse;
-import com.hasar.fiscal.dataLayer.beans.response.RespuestaDatosInicializacion;
 import com.hasar.fiscal.dataLayer.enums.Jurisdictions;
 
 import com.hasar.fiscal.dataLayer.beans.FiscalPayment;
-import com.hasar.fiscal.dataLayer.beans.FiscalText;
 import com.hasar.fiscal.dataLayer.beans.Text;
 import com.hasar.fiscal.dataLayer.beans.configuration.ConfigureFiscalPrinterBean;
-import com.hasar.fiscal.dataLayer.beans.download.DownloadAfipBean;
 import com.hasar.fiscal.dataLayer.beans.operation.CloseInvoiceBean;
 import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoiceBean;
-import com.hasar.fiscal.dataLayer.beans.operation.GenericText;
-import com.hasar.fiscal.dataLayer.beans.operation.GenericTextBean;
 import com.hasar.fiscal.dataLayer.beans.operation.InvoiceBean;
-import com.hasar.fiscal.dataLayer.beans.operation.ReportZByDateBean;
-import com.hasar.fiscal.dataLayer.beans.operation.ReportZByZNumberBean;
-import com.hasar.fiscal.dataLayer.beans.query.ElectronicInvoiceQueryBean;
 import com.hasar.fiscal.dataLayer.beans.response.CloseFiscalDayZResponse;
 import com.hasar.fiscal.dataLayer.beans.response.CloseInvoiceResponse;
-import com.hasar.fiscal.dataLayer.beans.response.ElectronicInvoiceQueryResponse;
 import com.hasar.fiscal.dataLayer.beans.response.ElectronicInvoiceResponse;
-import com.hasar.fiscal.dataLayer.beans.response.GenericTextResponse;
 import com.hasar.fiscal.dataLayer.beans.response.InvoiceResponse;
 import com.hasar.fiscal.dataLayer.beans.response.StateQueryResponse;
-import com.hasar.fiscal.dataLayer.beans.response.LastDownloadedElectronicAfipReportResponse;
-import com.hasar.fiscal.dataLayer.enums.AuditReportModes;
 import com.hasar.fiscal.dataLayer.enums.FiscalState;
 import com.hasar.fiscal.dataLayer.enums.InvoiceTypes;
 import com.hasar.fiscal.dataLayer.enums.PaymentTypes;
-import com.hasar.fiscal.dataLayer.enums.PrinterState;
 import com.hasar.fiscal.dataLayer.enums.StationModes;
 import com.hasar.fiscal.dataLayer.enums.TaxConditions;
-import com.hasar.fiscal.dataLayer.enums.TributesModes;
 import com.hasar.fiscal.dataLayer.factories.ClientFactory;
 import com.hasar.fiscal.dataLayer.factories.DiscountsFactory;
 import com.hasar.fiscal.dataLayer.factories.DocumentFactory;
@@ -97,7 +66,6 @@ import com.hasar.fiscal.dataLayer.factories.InternalTaxesFactory;
 import com.hasar.fiscal.dataLayer.factories.TaxExceptionFactory;
 import com.hasar.fiscal.dataLayer.factories.TributeFactory;
 import com.hasar.fiscal.dataLayer.factories.ZoneConfigurator;
-import com.hasar.fiscal.domain.Constants;
 import com.hasar.fiscal.exceptions.FiscalDriverException;
 import com.hasar.fiscal.executioner.Executioner;
 import com.hasar.fiscal.fiscalManager.FirstGenerationPrinterModel;
@@ -105,29 +73,12 @@ import com.hasar.fiscal.fiscalManager.FiscalManager;
 import com.hasar.fiscal.fiscalManager.FiscalManagerConfigurationBuilder;
 import com.hasar.fiscal.fiscalManager.SecondGenerationLocation;
 import com.hasar.fiscal.services.base.ServiceCallback;
-import com.hasar.fiscal.services.query.InitializationDataQueryService;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
-import java.io.File;
-import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import static com.hasar.fiscal.dataLayer.enums.InvoiceTypes.TIQUE;
 
@@ -168,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
     private ElectronicInvoiceBeanImpl electronicInvoiceBeanImpl;
     private Object Type;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
         rbFirst = findViewById(R.id.rbFirstGen);
         rbSecond = findViewById(R.id.rbSecondGen);
         rbElectronic = findViewById(R.id.rbElectronic);
+
+
         RadioGroup rbGroup = findViewById(R.id.llPrinterGen);
         rbGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -208,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Estado", "Despues: " + estadoDeImpresion);
 
         });
-
 
         btnSend = findViewById(R.id.buttonSend);
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                         FE_Register_Company();
                         break;
                     case 8:
-                        FP_FACTURA_A();
+                        FP_Factura_A();
                         break;
                     case 9:
                         FP_Factura_B();
@@ -256,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                         FP_Factura_C();
                         break;
                     case 12:
-                        FP_TIQUE();
+                        FP_Tique();
                         break;
                     case 13:
                         Header_Factura_A();
@@ -288,14 +239,14 @@ public class MainActivity extends AppCompatActivity {
                     case 22:
                         Medios_De_Pago(6);
                         break;
-                    //case 22:
-                    //  FE_Factura_B_Json();
-                    //break;
                     case 23:
                         Cierre_Z();
                         break;
                     case 24:
                         Cancelar();
+                        break;
+                    case 25:
+                        FP_Json();
                         break;
                 }
             }
@@ -815,7 +766,7 @@ public class MainActivity extends AppCompatActivity {
 
         InvoiceBean bean = new InvoiceBean();
 
-        bean.setInvoiceType(InvoiceTypes.FACTURA_C);
+        bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_C);
 
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Leche", "103", 00.50).quantity(1).iva(ivaRegistry.get("Gravado0")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Frutilla", "104", 00.00).quantity(1).iva(ivaRegistry.get("Gravado10.5")));
@@ -1024,7 +975,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-   /* private static String cleanTextContent(String text) {
+    private static String cleanTextContent(String text) {
         // strips off all non-ASCII characters
         text = text.replaceAll("[^\\x00-\\x7F]", "");
 
@@ -1037,7 +988,8 @@ public class MainActivity extends AppCompatActivity {
         return text.trim();
     }
 
-    private void Datos_Impresor() {
+    /*private void
+    () {
         FiscalManager.getInstance().initializationDataQuery(new ToastOnExceptionServiceCallback<RespuestaDatosInicializacion>(getApplicationContext()) {
             @Override
             public void onResult(RespuestaDatosInicializacion res) {
@@ -1057,35 +1009,27 @@ public class MainActivity extends AppCompatActivity {
 
     }*/
 
-    /*private void FP_Factura_B_JSON() {
-        try {
-            String json = txtJson.getText().toString();
-            String cleanJson = cleanTextContent(json);
-            //Gson gson = new Gson();
-            //InvoiceBean bean = gson.fromJson(cleanJson, InvoiceBean.class);
+    private void FP_Json() {
+        String json = txtJson.getText().toString();
+        String cleanJson = cleanTextContent(json);
+        Gson gson = new Gson();
+        InvoiceBean bean = gson.fromJson(cleanJson, InvoiceBean.class);
 
-
-
-
-            FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
-                        @Override
-                        public void onResult(InvoiceResponse response) {
-                            executePayment(1000000);
-                            Toast.makeText(getApplicationContext(), "**********PRUEBA_AND***********", Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onError(FiscalDriverException e) {
-                            super.onError(e);
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
+        FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
+                    @Override
+                    public void onResult(InvoiceResponse response) {
+                        executePayment(1000000);
+                        Toast.makeText(getApplicationContext(), "*PRUEBA_OK*", Toast.LENGTH_LONG).show();
                     }
-            );
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        }
 
-    }*/
+                    @Override
+                    public void onError(FiscalDriverException e) {
+                        super.onError(e);
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
 
     private void FP_Factura_C() {
         //Este test solo funciona con le configuracion de impresora y clover: MONOTRIBUTISTA
@@ -1287,7 +1231,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void FP_FACTURA_A() {
+    private void FP_Factura_A() {
         //Instantiate a InvoiceBean, to define an Invoice
         InvoiceBean bean = new InvoiceBean();
         //Set the invoice type with the InvoiceTypes enumeration.
@@ -1321,141 +1265,6 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-
-    /*private void FP_Nota_Credito_M() {      //   Test2
-        Text text = new Text("X01951505");
-        zoneConfigurator.cleanAll();
-        zoneConfigurator.configureTailOneZone(1, text, StationModes.ESTACION_POR_DEFECTO);
-
-        //Instantiate a InvoiceBean, to define an Invoice
-        InvoiceBean bean = new InvoiceBean();
-        //Set the invoice type with the InvoiceTypes enumeration.
-        bean.setInvoiceType(InvoiceTypes.TIQUE_NOTA_CREDITO_M);
-
-        AssociatedDocumentBean associatedDocumentBean = new AssociatedDocumentBean();
-        associatedDocumentBean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_M);
-        associatedDocumentBean.setPosNumber("123");
-        associatedDocumentBean.setReceiptNumber("1234567");
-
-        //bean.setAssociatedDocument(associatedDocumentBean);
-
-        bean.setClient(
-                clientFactory.newConsumidorFinal(
-                        "PALACIOS, MARIA ELENA",
-                        "RAMIREZ DE VELAZCO Y CORUÑA    - 5300 - LA RIOJA",
-                        documentFactory.newDNI("10028884")));
-
-        //Define a item to print in the invoice.,
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("1161390-2 TANINA", 374.25).quantity(2));
-
-        bean.setZones(zoneConfigurator.getZones());
-        FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
-            @Override
-            public void onResult(InvoiceResponse response) {
-                FiscalManager.getInstance().closeInvoice(new CloseInvoiceBean(), null);
-                Toast.makeText(getApplicationContext(), "**********DEMO***********", Toast.LENGTH_LONG).show();
-            }
-        });
-    }*/
-
-    /*private void Percepcion_Factura_A_04() {     //    Test7PrintPerception
-        TributesModeMapper tMapper = new TributesModeMapper();
-        List<InscripcionIIBB> InscripcionIIBBList = new ArrayList<InscripcionIIBB>();
-
-        InscripcionIIBBList.add(inscripcionIIBBFactory.newInscripcionIIBB(0, "902"));
-        InscripcionIIBBList.add(inscripcionIIBBFactory.newInscripcionIIBB(0, "905"));
-        InscripcionIIBBList.add(inscripcionIIBBFactory.newInscripcionIIBB(0, "911"));
-        InscripcionIIBBList.add(inscripcionIIBBFactory.newInscripcionIIBB(0, "913"));
-        InscripcionIIBBList.add(inscripcionIIBBFactory.newInscripcionIIBB(0, "915"));
-        InscripcionIIBBList.add(inscripcionIIBBFactory.newInscripcionIIBB(0, "920"));
-        InscripcionIIBBList.add(inscripcionIIBBFactory.newInscripcionIIBB(0, "921"));
-
-        List<TaxException> TaxExceptionList = new ArrayList<TaxException>();
-
-        TaxExceptionList.add(taxExceptionFactory.newTaxException("16", 80, Calendar.getInstance().getTime(), 0));
-        TaxExceptionList.add(taxExceptionFactory.newTaxException("555", 60, Calendar.getInstance().getTime(), 0));
-
-        //Instantiate a InvoiceBean, to define an Invoice
-        InvoiceBean bean = new InvoiceBean();
-        //Set the invoice type with the InvoiceTypes enumeration.
-        bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_A);
-
-        bean.setClient(
-                clientFactory.newResponsableInscripto(
-                        "ENRIQUEZ, MARIA ALEJANDRA",
-                        "av. Jose Jesus Oyola 223   - 5300 - LA RIOJA",
-                        documentFactory.newCUIT("99999999995"), TaxExceptionList, InscripcionIIBBList, true, false, true));
-
-        //Define a item to print in the invoice.,
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779394044800 - LECHE ENT. SACHET", "100", 19.00).iva(ivaRegistry.get("Gravado21")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779394044800 - LECHE ENT. SACHET", "101", 19.00).iva(ivaRegistry.get("Gravado21")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("125 - ATUN L.BAYAS .x170        ", "102", 37.29).iva(ivaRegistry.get("Gravado10.5")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("44 - NUEZ C/CASCARA             ", "103", 16.07).quantity(2).iva(ivaRegistry.get("Gravado10.5")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("103 - PIONONO PRIMAVERA         ", "104", 25.57).iva(ivaRegistry.get("Gravado10.5")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("227 - LECHUGA MORADA        ", "105", 20.98).quantity(0.500).iva(ivaRegistry.get("Gravado10.5")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("125 - ATUN L.BAYAS .x170        ", "106", 35.87).iva(ivaRegistry.get("Gravado10.5")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779815870774 - GUANTES BEST     ", "107", 24.80));
-
-        Discounts discounts = discountsFactory.newDiscount(5, "Mini discount");
-
-        bean.getDiscounts().add(discounts);
-
-        FiscalManager.getInstance().perceptions(bean, new ToastOnExceptionServiceCallback<PerceptionResponse>(getApplicationContext()) {
-            @Override
-            public void onResult(PerceptionResponse perceptionResponse) {
-                List<Perception> perceptionList;
-                perceptionList = perceptionResponse.getPerceptionList();
-                sleep();
-                ArrayList<Tributes> tributesToPrint = new ArrayList<>();
-                for (Perception perception : perceptionList) {
-
-                    tributesToPrint.add(tributeFactory.newTribute(tMapper.Map(perception.getDescripcionAbreviaturaField()), perception.getDescripcionAbreviaturaField(), perception.getMontoBaseCalculoField(), perception.getMontoPercepcionField(), perception.getAlicuotaField()));
-                } // TODO VER LOS TIPOS DE PERCEPTIONES PARA PODER IMPRIMIRLAS
-
-                bean.setTributes(tributesToPrint);
-
-                FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
-                            @Override
-                            public void onResult(InvoiceResponse response) {
-
-
-                                Toast.makeText(getApplicationContext(), "Test 4 finished.", Toast.LENGTH_LONG).show();
-                                sleep();
-                                executePayment(300);
-                            }
-                        }
-                );
-
-            }
-
-        });
-
-    }*/
-
-
-    /*private void FE_Query() {     //    testElectronicInvoiceQuery
-            electronicInvoiceFactory = new ElectronicInvoiceFactory(99,
-                "123ABC", //123ABC //88814,
-                3,
-                documentFactory.newCUIT("30522211563"), "0");
-
-        if (lastTransactionNumber.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "You must create a electronic invoice", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        ElectronicInvoiceQueryBean query = electronicInvoiceFactory.newQuery(lastTransactionNumber);
-        //Or
-        // ElectronicInvoiceQueryBean query = electronicInvoiceFactory.newQuery(aElectronicInvoiceResponse);
-        //Or
-        // ElectronicInvoiceQueryBean query = electronicInvoiceFactory.newQuery(aElectronicInvoiceBean);
-        FiscalManager.getInstance().electronicInvoiceQuery(query, new ToastOnExceptionServiceCallback<ElectronicInvoiceQueryResponse>(getApplicationContext()) {
-            @Override
-            public void onResult(ElectronicInvoiceQueryResponse response) {
-                Toast.makeText(getApplicationContext(), "Last transaction list size: " + response.getElectronicInvoices().size(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
-
     private void FE_Afip_Is_Alive() {      //    testAfipIsAlive
         // Check if afip is alive
         FiscalManager.getInstance().electronicInvoiceAfipAlive(new ToastOnExceptionServiceCallback<Boolean>(getApplicationContext()) {
@@ -1480,7 +1289,7 @@ public class MainActivity extends AppCompatActivity {
                 clientFactory.newConsumidorFinal(
                         "PRUEBA",
                         "CalleSiempreViva 666",
-                        documentFactory.newNinguno("34859766")));
+                        documentFactory.newDNI("34859766")));
 
         zoneConfigurator.cleanAll();
         zoneConfigurator.configureHeaderOneZone(1, new Text("linea 1"), StationModes.ESTACION_TICKET);
@@ -1548,7 +1357,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void FE_Factura_B_Json() {
+    /*private void FE_Factura_B_Json() {
         try {
             String json = txtJson.getText().toString();
             Gson gson = new Gson();
@@ -1603,7 +1412,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (JsonSyntaxException e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
     private void Header_Factura_A() {    //  testLinesZone_Ticket_A
         InvoiceBean bean = new InvoiceBean();
@@ -1787,7 +1596,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void FP_TIQUE() {
+    private void FP_Tique() {
         InvoiceBean bean = new InvoiceBean();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE);
@@ -1803,16 +1612,11 @@ public class MainActivity extends AppCompatActivity {
         FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
                     @Override
                     public void onResult(InvoiceResponse response) {
-                        executePayment(10000);
-                        response.setRoundAdjustment(5);
-                        double redondeo = response.getRoundAdjustment();
-
+                        executePayment(1000);
                         StringBuilder builder = new StringBuilder();
                         builder.append("Factura B OK");
-                        builder.append("Get redondeo: " + ((int) redondeo));
                         Toast.makeText(getApplicationContext(), builder, Toast.LENGTH_LONG).show();
                     }
-
 
                     @Override
                     public void onError(FiscalDriverException e) {

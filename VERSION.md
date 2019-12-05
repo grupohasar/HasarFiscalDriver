@@ -1,3 +1,10 @@
+VERSION 0.9.0
+Clase FiscalItemImpl, ya no implementa interfaz IFiscalItem.
+Se corrigió mapeo de tipo de cbte a libreria de 1ra generacion, de tipo de cbte TIQUE a TICKET_C.
+Se agrega test para impresion de cbte tipo TIQUE.
+Se agrega test para impresion de cbte tipo TIQUE_NOTA_CREDITO_B.
+Se modifico SandBox para poder realizar un test de InvoiceBean() por medio de un JSon. Se agrega espacio para entrada de JSon y test.
+
 VERSION 0.8.0
 Se corrigio error que no permitia realizar facturas en 2da generacion por red
 
