@@ -1,3 +1,6 @@
+VERSION 0.10.0
+Se agrega nuevo test Datos_Inicializacion para obtener los datos de inicializacion del impresor
+
 VERSION 0.9.0
 Clase FiscalItemImpl, ya no implementa interfaz IFiscalItem.
 Se corrigió mapeo de tipo de cbte a libreria de 1ra generacion, de tipo de cbte TIQUE a TICKET_C.

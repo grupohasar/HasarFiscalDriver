@@ -53,6 +53,7 @@ import com.hasar.fiscal.dataLayer.enums.InvoiceTypes;
 import com.hasar.fiscal.dataLayer.enums.PaymentTypes;
 import com.hasar.fiscal.dataLayer.enums.StationModes;
 import com.hasar.fiscal.dataLayer.enums.TaxConditions;
+import com.hasar.fiscal.dataLayer.enums.TributesModes;
 import com.hasar.fiscal.dataLayer.factories.ClientFactory;
 import com.hasar.fiscal.dataLayer.factories.DiscountsFactory;
 import com.hasar.fiscal.dataLayer.factories.DocumentFactory;
@@ -247,6 +248,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 25:
                         FP_Json();
+                        break;
+                    case 26:
+                        Datos_Inicializacion();
                         break;
                 }
             }
@@ -988,26 +992,36 @@ public class MainActivity extends AppCompatActivity {
         return text.trim();
     }
 
-    /*private void
-    () {
+    private void Datos_Inicializacion() {
         FiscalManager.getInstance().initializationDataQuery(new ToastOnExceptionServiceCallback<RespuestaDatosInicializacion>(getApplicationContext()) {
-            @Override
-            public void onResult(RespuestaDatosInicializacion res) {
-                StringBuilder builder = new StringBuilder();
-                builder.append("CUIT: " + res.getCUIT());
-                builder.append('\n');
-                builder.append("Ing Brutos: " + res.getIngBrutos());
-                builder.append('\n');
-                builder.append("POS: " + res.getNumeroPos());
-                builder.append('\n');
-                builder.append("IVA: " + res.getResponsabilidadIVA());
+                @Override
+                public void onResult(RespuestaDatosInicializacion response) {
+                    StringBuilder builder = new StringBuilder();
+                    builder.append('\n');
+                    builder.append("CUIT:  " + response.getCUIT());
+                    builder.append('\n');
+                    builder.append("Razon social:  " + response.getRazonSocial());
+                    builder.append('\n');
+                    builder.append("Registro:  " + response.getRegistro());
+                    builder.append('\n');
+                    builder.append("InicioAct:  " + response.getFechaInicioActividades());
+                    builder.append('\n');
+                    builder.append("InscripcionIIBB:  " + response.getIngBrutos());
+                    builder.append('\n');
+                    builder.append("POS:  " + response.getNumeroPos());
+                    builder.append('\n');
+                    builder.append("ResponsabilidadIVA:  " + response.getResponsabilidadIVA());
+                    Toast.makeText(getApplicationContext(), builder, Toast.LENGTH_LONG).show();
+                }
 
-                Toast.makeText(getApplicationContext(), builder.toString(), Toast.LENGTH_SHORT).show();
+                @Override
+                public void onError(FiscalDriverException e) {
+                    super.onError(e);
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
-
-        });
-
-    }*/
+        );
+    }
 
     private void FP_Json() {
         String json = txtJson.getText().toString();
@@ -1627,5 +1641,34 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    /*private void FP_Percepcion() {
+        InvoiceBean bean = new InvoiceBean();
+        bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_A);
+        bean.setClient(
+                clientFactory.newResponsableInscripto(
+                        "CAPPELLO, PABLO FERNANDO",
+                        "Sarmiento 6 CHACABUCO",
+                        documentFactory.newCUIT("20214983681")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("780681022100 - RALLADOR         ", "100", 1000.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 50.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "102", 500.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        ArrayList<Tributes> tributeList= new ArrayList<>();
+        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Tributo", 100.00, 100.0, 100.0));
+        bean.setTributes(tributeList);
+        FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
+                    @Override
+                    public void onResult(InvoiceResponse response) {
+                        Toast.makeText(getApplicationContext(), "**DEMO**", Toast.LENGTH_LONG).show();
+                        sleep();
+                        executePaymentTest7(201.12, 200);
+                    }
+                    @Override
+                    public void onError(FiscalDriverException e) {
+                        super.onError(e);
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }*/
 
 }

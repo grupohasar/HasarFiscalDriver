@@ -26,6 +26,7 @@
         <item>Cierre Z</item>
         <item>Cancelar</item>
         <item>Json test FP</item>
+        <item>Datos Inicializacion</item>
     </string-array>
     <string name="app_name">HasarFiscalLibraryExampleTests</string>
     <string name="lbl_IP">Ip</string>
