@@ -74,6 +74,7 @@ import com.hasar.fiscal.fiscalManager.FiscalManager;
 import com.hasar.fiscal.fiscalManager.FiscalManagerConfigurationBuilder;
 import com.hasar.fiscal.fiscalManager.SecondGenerationLocation;
 import com.hasar.fiscal.services.base.ServiceCallback;
+import com.hasar.fiscal.services.query.InitializationDataQueryService;
 
 
 import java.net.MalformedURLException;
@@ -251,6 +252,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 26:
                         Datos_Inicializacion();
+                        break;
+                    case 27:
+                        FP_Percepcion();
                         break;
                 }
             }
@@ -1016,12 +1020,12 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onError(FiscalDriverException e) {
-                    super.onError(e);
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         );
     }
+
 
     private void FP_Json() {
         String json = txtJson.getText().toString();
@@ -1641,7 +1645,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    /*private void FP_Percepcion() {
+    private void FP_Percepcion() {
         InvoiceBean bean = new InvoiceBean();
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_A);
         bean.setClient(
@@ -1669,6 +1673,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-    }*/
+    }
 
 }
