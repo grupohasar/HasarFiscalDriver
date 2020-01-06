@@ -1,5 +1,7 @@
 VERSION 0.10.0
 Se agrega nuevo test Datos_Inicializacion para obtener los datos de inicializacion del impresor
+Se agrega test Percepciones, se realiza la carga de tributos mediante newTribute()
+
 
 VERSION 0.9.0
 Clase FiscalItemImpl, ya no implementa interfaz IFiscalItem.
