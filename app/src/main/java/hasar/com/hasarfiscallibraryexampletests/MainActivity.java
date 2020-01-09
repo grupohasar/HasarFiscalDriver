@@ -254,7 +254,10 @@ public class MainActivity extends AppCompatActivity {
                         Datos_Inicializacion();
                         break;
                     case 27:
-                        FP_Percepcion();
+                        FP_Percepcion_IIBB();
+                        break;
+                    case 28:
+                        FP_Percepcion_IVA();
                         break;
                 }
             }
@@ -1645,7 +1648,39 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void FP_Percepcion() {
+    private void FP_Percepcion_IVA() {
+        InvoiceBean bean = new InvoiceBean();
+        bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_A);
+        bean.setClient(
+                clientFactory.newResponsableInscripto(
+                        "CAPPELLO, PABLO FERNANDO",
+                        "Sarmiento 6 CHACABUCO",
+                        documentFactory.newCUIT("20214983681")));
+
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("780681022100 - RALLADOR         ", "100", 1000.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 50.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
+
+        ArrayList<Tributes> tributeList= new ArrayList<>();
+        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IVA, "RG3337", 21.00, 43.56, 21.00));
+        bean.setTributes(tributeList);
+
+        FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
+                    @Override
+                    public void onResult(InvoiceResponse response) {
+                        Toast.makeText(getApplicationContext(), "**DEMO**", Toast.LENGTH_LONG).show();
+                        sleep();
+                        executePaymentTest7(201.12, 200);
+                    }
+                    @Override
+                    public void onError(FiscalDriverException e) {
+                        super.onError(e);
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+
+    private void FP_Percepcion_IIBB() {
         InvoiceBean bean = new InvoiceBean();
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_A);
         bean.setClient(
@@ -1657,7 +1692,7 @@ public class MainActivity extends AppCompatActivity {
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 50.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "102", 500.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
         ArrayList<Tributes> tributeList= new ArrayList<>();
-        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Tributo", 100.00, 100.0, 100.0));
+        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Tributo", 21.00, 100.00, 21.00));
         bean.setTributes(tributeList);
         FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
                     @Override
