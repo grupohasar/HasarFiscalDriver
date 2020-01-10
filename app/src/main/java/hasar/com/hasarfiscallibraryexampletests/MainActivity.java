@@ -1657,11 +1657,12 @@ public class MainActivity extends AppCompatActivity {
                         "Sarmiento 6 CHACABUCO",
                         documentFactory.newCUIT("20214983681")));
 
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("780681022100 - RALLADOR         ", "100", 1000.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 50.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("780681022100 - RALLADOR", "100", 5000.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 5000.00).quantity(1).iva(ivaRegistry.get("Gravado10.5")));
 
         ArrayList<Tributes> tributeList= new ArrayList<>();
-        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IVA, "RG3337", 21.00, 43.56, 21.00));
+        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IVA, "Percepcion 21", 5000, 150, 21.00));
+        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IVA, "Percepcion 10.5", 5000, 75, 10.50));
         bean.setTributes(tributeList);
 
         FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
@@ -1688,11 +1689,13 @@ public class MainActivity extends AppCompatActivity {
                         "CAPPELLO, PABLO FERNANDO",
                         "Sarmiento 6 CHACABUCO",
                         documentFactory.newCUIT("20214983681")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("780681022100 - RALLADOR         ", "100", 1000.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 50.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "102", 500.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("780681022100 - RALLADOR         ", "100", 1000).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 5000).quantity(1).iva(ivaRegistry.get("Gravado10.5")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "102", 500).quantity(1).iva(ivaRegistry.get("Gravado0")));
         ArrayList<Tributes> tributeList= new ArrayList<>();
-        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Tributo", 21.00, 100.00, 21.00));
+        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Percepcion 21", 1000, 100.00, 21.00));
+        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Percepcion 10.5", 5000, 100.00, 10.50));
+        tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Percepcion 0", 500, 100.00, 0.00));
         bean.setTributes(tributeList);
         FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getApplicationContext()) {
                     @Override

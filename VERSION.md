@@ -1,4 +1,9 @@
-VERSION 0.10.0
+VERSION 0.10.2 de SDK
+Se agregan test de percepciones, uno para IVA y otro para IIBB.
+Se modifica SDK para que tome el valor del parametro Alicuota del metodo newTribute().
+Ahora permite cargar distintas percepciones por ticket (MAXIMO 5). Debe coincidir el valor de alicuota segun el valor de iva del item.
+
+VERSION 0.10.1 de SDK
 Se agrega nuevo test Datos_Inicializacion para obtener los datos de inicializacion del impresor
 Se agrega test Percepciones, se realiza la carga de tributos mediante newTribute()
 
