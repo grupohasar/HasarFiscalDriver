@@ -1,9 +1,13 @@
 <resources>
+    <string name="app_name">Sandbox Driver Fiscal</string>
+    <string name="tab_entrada">ENVIOS</string>
+    <string name="tab_salida">RESPUESTAS</string>
+
     <string-array name="command_array">
         <item>Factura Electronica A </item>
         <item>Factura Electronica B </item>
         <item>Factura Electronica C </item>
-        <item>FE_ACK</item>
+        <item>FE ACK</item>
         <item>Percepcion Factura A  </item>
         <item>Percepcion Factura A 02 </item>
         <item>AFIP </item>
@@ -12,13 +16,12 @@
         <item>Factura B </item>
         <item>Nota de Credito B</item>
         <item>Factura C </item>
-        <item>FP_TIQUE </item>
+        <item>FP Tique </item>
         <item>Header Factura A </item>
         <item>Header Factura B </item>
         <item>Header No Fiscal</item>
-        <item>Tipo Habilitacion: A </item>
-        <item>Tipo Habilitacion: L </item>
-        <item>Tipo Habilitacion: M </item>
+        <item>Setear configuracion</item>
+        <item>Obtener configuracion</item>
         <item>No Categorizado </item>
         <item>4 Medios de Pago </item>
         <item>5 Medios de Pago </item>
@@ -30,10 +33,8 @@
         <item>Percepciones FP IIBB</item>
         <item>Percepciones FP IVA</item>
     </string-array>
-    <string name="app_name">HasarFiscalLibraryExampleTests</string>
-    <string name="lbl_IP">Ip</string>
+    <string name="lbl_IP">IP:</string>
     <string name="rbutton_first_generation">1st Generation</string>
     <string name="rbutton_second_generation">2nd Generation</string>
     <string name="button_send">Send</string>
-
 </resources>

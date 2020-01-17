@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/llEndpoint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="false"
+        android:paddingBottom="8dp"
+        android:paddingTop="55dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:paddingTop="35dp"
+            android:text="@string/lbl_IP"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/txtIp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="false"
+            android:layout_toEndOf="@+id/textView"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="textPersonName"
+            android:text="http://10.0.6.100:6400"
+            android:layout_toRightOf="@+id/textView" />
+    </RelativeLayout>
+
+    <RadioGroup
+        android:id="@+id/llPrinterGen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/llEndpoint"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <RadioButton
+            android:id="@+id/rbFirstGen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/rbutton_first_generation" />
+
+        <RadioButton
+            android:id="@+id/rbSecondGen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/rbutton_second_generation" />
+
+        <RadioButton
+            android:id="@+id/rbElectronic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Electronic Invoice" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/llCommand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/llPrinterGen"
+        android:orientation="horizontal"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold" />
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="230dp"
+            android:layout_height="49dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llCommand"
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="100dp">
+
+        <Button
+            android:id="@+id/buttonSend"
+            android:layout_width="121dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/button_send"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/json"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llButton"
+        android:orientation="vertical"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp">
+
+        <EditText
+            android:id="@+id/txtJson"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:enabled="true"
+            android:gravity="left"
+            android:hint="Json"
+            android:inputType="textMultiLine"
+            android:lines="13"
+            android:maxLines="2000000"
+            android:singleLine="false" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/factura_desconectar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="17dp"
+        android:text="Factura Desconectar"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="17dp" />
+
+    <Button
+        android:id="@+id/reintentar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/factura_desconectar"
+        android:layout_marginEnd="26dp"
+        android:text="Reintentar"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="26dp" />
+</RelativeLayout>
+

@@ -41,4 +41,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.1'
     //define dependency to the Hasar Fiscal Library (.aar)
     implementation(name: 'hasarfiscallibrary', ext: 'aar')
+    implementation 'com.android.support:design:27.+'
 }
