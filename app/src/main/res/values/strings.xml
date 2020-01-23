@@ -1,38 +1,65 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Sandbox Driver Fiscal</string>
     <string name="tab_entrada">ENVIOS</string>
     <string name="tab_salida">RESPUESTAS</string>
 
-    <string-array name="command_array">
-        <item>Factura Electronica A </item>
-        <item>Factura Electronica B </item>
-        <item>Factura Electronica C </item>
+    <!-- GRUPO ELECTRONIC INVOICE -->
+    <string-array name="group_fe">
+        <item>Factura Electronica A</item>
+        <item>Factura Electronica B</item>
+        <item>Factura Electronica C</item>
         <item>FE ACK</item>
-        <item>Percepcion Factura A  </item>
-        <item>Percepcion Factura A 02 </item>
+        <item>Percepcion Factura A</item>
+        <item>Percepcion Factura A 02</item>
         <item>AFIP </item>
         <item>Register Company</item>
-        <item>Factura A </item>
-        <item>Factura B </item>
+    </string-array>
+
+    <!-- GRUPO FISCAL PRINTER -->
+    <string-array name="group_fp">
+        <item>TESTS FACTURA</item>
+        <item>TESTS HEADER</item>
+        <item>TESTS MEDIOS DE PAGO</item>
+        <item>TESTS PERCEPCIONES</item>
+        <item>OTRAS OPERACIONES</item>
+    </string-array>
+
+    <string-array name="subgroup_Factura">
+        <item>Factura A</item>
+        <item>Factura B</item>
+        <item>Factura C</item>
         <item>Nota de Credito B</item>
-        <item>Factura C </item>
-        <item>FP Tique </item>
-        <item>Header Factura A </item>
-        <item>Header Factura B </item>
+        <item>FP Tique</item>
+        <item>No Categorizado</item>
+    </string-array>
+
+    <string-array name="subgroup_Header">
+        <item>Header Factura A</item>
+        <item>Header Factura B</item>
         <item>Header No Fiscal</item>
-        <item>Setear configuracion</item>
-        <item>Obtener configuracion</item>
-        <item>No Categorizado </item>
-        <item>4 Medios de Pago </item>
-        <item>5 Medios de Pago </item>
-        <item>6 Medios de Pago </item>
-        <item>Cierre Z</item>
-        <item>Cancelar</item>
-        <item>Json test FP</item>
-        <item>Datos Inicializacion</item>
+    </string-array>
+
+    <string-array name="subgroup_Pagos">
+        <item>4 Medios de Pago</item>
+        <item>5 Medios de Pago</item>
+        <item>6 Medios de Pago</item>
+    </string-array>
+
+    <string-array name="subgroup_Percepciones">
         <item>Percepciones FP IIBB</item>
         <item>Percepciones FP IVA</item>
     </string-array>
+
+    <string-array name="subgroup_OtrasOperaciones">
+        <item>Cierre Z</item>
+        <item>Cancelar</item>
+        <item>Setear configuracion</item>
+        <item>Obtener configuracion</item>
+        <item>Datos Inicializacion</item>
+        <item>Json test FP</item>
+        <item>Download AFIP</item>
+    </string-array>
+
     <string name="lbl_IP">IP:</string>
     <string name="rbutton_first_generation">1st Generation</string>
     <string name="rbutton_second_generation">2nd Generation</string>

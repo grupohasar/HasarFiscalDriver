@@ -1,16 +1,27 @@
 package hasar.com.hasarfiscallibraryexampletests;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -29,9 +40,16 @@ import com.hasar.fiscal.dataLayer.beans.Tributes;
 
 
 import com.hasar.fiscal.dataLayer.beans.TributesModeMapper;
+import com.hasar.fiscal.dataLayer.beans.download.DownloadAfipBean;
+import com.hasar.fiscal.dataLayer.beans.get.GetDatesRangeByZBean;
+import com.hasar.fiscal.dataLayer.beans.get.GetFirstElectronicReportBlockBean;
 import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoiceACKBean;
 import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoicerRegisterCompanyBean;
 import com.hasar.fiscal.dataLayer.beans.response.ElectronicInvoiceRegisterCompanyResponse;
+import com.hasar.fiscal.dataLayer.beans.response.GetDatesRangeByZResponse;
+import com.hasar.fiscal.dataLayer.beans.response.GetFirstElectronicReportBlockResponse;
+import com.hasar.fiscal.dataLayer.beans.response.GetNextElectronicReportBlockResponse;
+import com.hasar.fiscal.dataLayer.beans.response.LastDownloadedElectronicAfipReportResponse;
 import com.hasar.fiscal.dataLayer.beans.response.RespuestaDatosInicializacion;
 import com.hasar.fiscal.dataLayer.beans.response.PerceptionResponse;
 import com.hasar.fiscal.dataLayer.enums.Jurisdictions;
@@ -50,6 +68,7 @@ import com.hasar.fiscal.dataLayer.beans.response.StateQueryResponse;
 import com.hasar.fiscal.dataLayer.enums.FiscalState;
 import com.hasar.fiscal.dataLayer.enums.InvoiceTypes;
 import com.hasar.fiscal.dataLayer.enums.PaymentTypes;
+import com.hasar.fiscal.dataLayer.enums.ReportTypeAFIP;
 import com.hasar.fiscal.dataLayer.enums.StationModes;
 import com.hasar.fiscal.dataLayer.enums.TaxConditions;
 import com.hasar.fiscal.dataLayer.enums.TributesModes;
@@ -73,13 +92,16 @@ import com.hasar.fiscal.fiscalManager.FiscalManager;
 import com.hasar.fiscal.fiscalManager.FiscalManagerConfigurationBuilder;
 import com.hasar.fiscal.fiscalManager.SecondGenerationLocation;
 import com.hasar.fiscal.services.base.ServiceCallback;
+import com.hasar.fiscal.services.get.GetLastDownloadedElectronicAfipReportService;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -129,139 +151,223 @@ public class EntradaFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        generateIVAs();
-        final TextView txtVersion = getView().findViewById(R.id.textView2);
-        txtVersion.setText("VERSION: " + versionLibrary);
-
-        final Spinner dropdown = getView().findViewById(R.id.spinner1);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.command_array, android.R.layout.simple_spinner_dropdown_item);
-        dropdown.setAdapter(adapter);
-
         txtIp = getView().findViewById(R.id.txtIp);
         txtJson = getView().findViewById(R.id.txtJson);
         rbFirst = getView().findViewById(R.id.rbFirstGen);
         rbSecond = getView().findViewById(R.id.rbSecondGen);
         rbElectronic = getView().findViewById(R.id.rbElectronic);
-
+        btnFactura = getView().findViewById(R.id.factura_desconectar);
+        btnReintentar = getView().findViewById(R.id.reintentar);
+        btnSend = getView().findViewById(R.id.buttonSend);
         RadioGroup rbGroup = getView().findViewById(R.id.llPrinterGen);
+        names = new ArrayList<>();
+
+        generateIVAs();
+        final TextView txtVersion = getView().findViewById(R.id.textView2);
+        txtVersion.setText("VERSION: " + versionLibrary);
+        final Spinner dropdown_group = getView().findViewById(R.id.spinner1);
+        final Spinner dropdown_subgroup = getView().findViewById(R.id.spinner2);
+
+        /*LLENO LISTAS SPINNER*/
+        llenarSpinnerGroup(dropdown_group); //Lleno lista de test si es FE o FP
+        llenarSpinnerSubGroup(dropdown_group, dropdown_subgroup); //Lleno lista de test de subgrupos
+
+        /*LLENO SPINNER SEGUN RADIO BUTTON*/
         rbGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 txtIp.setEnabled(rbSecond.isChecked());
+
+                /*LLENO LISTAS SPINNER*/
+                llenarSpinnerGroup(dropdown_group); //Lleno lista de test si es FE o FP
+                llenarSpinnerSubGroup(dropdown_group, dropdown_subgroup); //Lleno lista de test de subgrupos
             }
         });
 
-        btnFactura = getView().findViewById(R.id.factura_desconectar);
-        btnReintentar = getView().findViewById(R.id.reintentar);
-        names = new ArrayList<>();
+        /*LLENO SUBGRUPO SEGUN SELECCION DE GRUPO*/
+        dropdown_group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                llenarSpinnerSubGroup(dropdown_group, dropdown_subgroup);
+            }
 
-        //btnFactura.setOnClickListener((v) -> this.enviarFacturaConPagoParaDesconectar());
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         btnReintentar.setOnClickListener((v) -> {
             Log.d("Estado", "Antes: " + estadoDeImpresion);
             this.reintentar();
             Log.d("Estado", "Despues: " + estadoDeImpresion);
-
         });
 
-        btnSend = getView().findViewById(R.id.buttonSend);
         btnSend.setOnClickListener(new View.OnClickListener() {
+            ArrayAdapter<CharSequence> adapter_subgroup;
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-
                 initFiscalManager();
 
-
-                switch (dropdown.getSelectedItemPosition()) {
-                    case 0:
-                        FE_Factura_A();
-                        break;
-                    case 1:
-                        FE_Factura_B();
-                        break;
-                    case 2:
-                        FE_Factura_C();
-                        break;
-                    case 3:
-                        FE_ACK();
-                        break;
-                    case 4:
-                        Percepcion_Factura_A();
-                        break;
-                    case 5:
-                        Percepcion_Factura_A_02();
-                        break;
-                    case 6:
-                        FE_Afip_Is_Alive();
-                        break;
-                    case 7:
-                        FE_Register_Company();
-                        break;
-                    case 8:
-                        FP_Factura_A();
-                        break;
-                    case 9:
-                        FP_Factura_B();
-                        break;
-                    case 10:
-                        FP_NDC_B();
-                        break;
-                    case 11:
-                        FP_Factura_C();
-                        break;
-                    case 12:
-                        FP_Tique();
-                        break;
-                    case 13:
-                        Header_Factura_A();
-                        break;
-                    case 14:
-                        Header_Factura_B();
-                        break;
-                    case 15:
-                        Header_No_Fiscal();
-                        break;
-                    case 16:
-                        set_Configuracion('A', 8000, 8000);
-                        break;
-                    case 17:
-                        get_Configuracion();
-                        break;
-                    case 18:
-                        FP_Cliente_No_Categorizado();
-                        break;
-                    case 19:
-                        Medios_De_Pago(4);
-                        break;
-                    case 20:
-                        Medios_De_Pago(5);
-                        break;
-                    case 21:
-                        Medios_De_Pago(6);
-                        break;
-                    case 22:
-                        Cierre_Z();
-                        break;
-                    case 23:
-                        Cancelar();
-                        break;
-                    case 24:
-                        FP_Json();
-                        break;
-                    case 25:
-                        Datos_Inicializacion();
-                        break;
-                    case 26:
-                        FP_Percepcion_IIBB();
-                        break;
-                    case 27:
-                        FP_Percepcion_IVA();
-                        break;
+                if (rbElectronic.isChecked()) { //TESTS FE
+                    switch (dropdown_group.getSelectedItemPosition()) {
+                        case 0:
+                            FE_Factura_A();
+                            break;
+                        case 1:
+                            FE_Factura_B();
+                            break;
+                        case 2:
+                            FE_Factura_C();
+                            break;
+                        case 3:
+                            FE_ACK();
+                            break;
+                        case 4:
+                            Percepcion_Factura_A();
+                            break;
+                        case 5:
+                            Percepcion_Factura_A_02();
+                            break;
+                        case 6:
+                            FE_Afip_Is_Alive();
+                            break;
+                        case 7:
+                            FE_Register_Company();
+                            break;
+                    }
+                } else { //TESTS FP
+                    switch (dropdown_group.getSelectedItemPosition()) {
+                        case 0: //FACTURA
+                            switch (dropdown_subgroup.getSelectedItemPosition()) {
+                                case 0:
+                                    FP_Factura_A();
+                                    break;
+                                case 1:
+                                    FP_Factura_B();
+                                    break;
+                                case 2:
+                                    FP_Factura_C();
+                                    break;
+                                case 3:
+                                    FP_NDC_B();
+                                    break;
+                                case 4:
+                                    FP_Tique();
+                                    break;
+                                case 5:
+                                    FP_Cliente_No_Categorizado();
+                                    break;
+                            }
+                            break;
+                        case 1: //HEADER
+                            switch (dropdown_subgroup.getSelectedItemPosition()) {
+                                case 0:
+                                    Header_Factura_A();
+                                    break;
+                                case 1:
+                                    Header_Factura_B();
+                                    break;
+                                case 2:
+                                    Header_No_Fiscal();
+                                    break;
+                            }
+                            break;
+                        case 2: //Pagos
+                            switch (dropdown_subgroup.getSelectedItemPosition()) {
+                                case 0:
+                                    Medios_De_Pago(4);
+                                    break;
+                                case 1:
+                                    Medios_De_Pago(5);
+                                    break;
+                                case 2:
+                                    Medios_De_Pago(6);
+                                    break;
+                            }
+                            break;
+                        case 3: //Percepciones
+                            switch (dropdown_subgroup.getSelectedItemPosition()) {
+                                case 0:
+                                    FP_Percepcion_IIBB();
+                                    break;
+                                case 1:
+                                    FP_Percepcion_IVA();
+                                    break;
+                            }
+                            break;
+                        case 4: //Otras Operaciones
+                            switch (dropdown_subgroup.getSelectedItemPosition()) {
+                                case 0:
+                                    Cierre_Z();
+                                    break;
+                                case 1:
+                                    Cancelar();
+                                    break;
+                                case 2:
+                                    set_Configuracion('A', 8000, 8000);
+                                    break;
+                                case 3:
+                                    get_Configuracion();
+                                    break;
+                                case 4:
+                                    Datos_Inicializacion();
+                                    break;
+                                case 5:
+                                    FP_Json();
+                                    break;
+                                case 6:
+                                    try {
+                                        DownloadAfip();
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                            }
+                            break;
+                    }
                 }
             }
         });
-
     }
+
+
+    private void llenarSpinnerGroup(Spinner dropdown_group) {
+        ArrayAdapter<CharSequence> adapter_group;
+        if (rbElectronic.isChecked())
+            adapter_group = ArrayAdapter.createFromResource(getContext(), R.array.group_fe, android.R.layout.simple_spinner_dropdown_item);
+        else
+            adapter_group = ArrayAdapter.createFromResource(getContext(), R.array.group_fp, android.R.layout.simple_spinner_dropdown_item);
+
+        dropdown_group.setAdapter(adapter_group);
+    }
+
+    private void llenarSpinnerSubGroup(Spinner dropdown_group, Spinner dropdown_subgroup) {
+        if (rbElectronic.isChecked())
+            dropdown_subgroup.setAdapter(null);
+        else {
+            switch (dropdown_group.getSelectedItemPosition()) {
+                case 0: //Factura
+                    dropdown_subgroup.setAdapter(ArrayAdapter.createFromResource(getContext(), R.array.subgroup_Factura, android.R.layout.simple_spinner_dropdown_item));
+                    break;
+                case 1: //Factura
+                    dropdown_subgroup.setAdapter(ArrayAdapter.createFromResource(getContext(), R.array.subgroup_Header, android.R.layout.simple_spinner_dropdown_item));
+                    break;
+                case 2: //Factura
+                    dropdown_subgroup.setAdapter(ArrayAdapter.createFromResource(getContext(), R.array.subgroup_Pagos, android.R.layout.simple_spinner_dropdown_item));
+                    break;
+                case 3: //Factura
+                    dropdown_subgroup.setAdapter(ArrayAdapter.createFromResource(getContext(), R.array.subgroup_Percepciones, android.R.layout.simple_spinner_dropdown_item));
+                    break;
+                case 4: //Factura
+                    dropdown_subgroup.setAdapter(ArrayAdapter.createFromResource(getContext(), R.array.subgroup_OtrasOperaciones, android.R.layout.simple_spinner_dropdown_item));
+                    break;
+            }
+        }
+    }
+
 
     private void generateIVAs() {
         ivaRegistry = IVARegistry.getInstance();
@@ -595,7 +701,15 @@ public class EntradaFragment extends Fragment {
         Date date = new Date();
         String fecha = dateFormat.format(date);
 
-        String salidaList = fecha + " | " + nombreTest + " | " + respuesta;
+        String opcion;
+        if (rbElectronic.isChecked())
+            opcion = "Electronic Invoice";
+        else if (rbFirst.isChecked())
+            opcion = "1st Generation";
+        else
+            opcion = "2nd Generation";
+
+        String salidaList = fecha + " | " + opcion + "\n" + nombreTest + " | " + respuesta;
         names.add(salidaList);
         Collections.reverse(names);
     }
@@ -1520,8 +1634,8 @@ public class EntradaFragment extends Fragment {
             public void onResult(Void aVoid) {
                 /*Promise getTipoHabilitacion*/
 
-                Toast.makeText(getContext(),"Set OK", Toast.LENGTH_LONG).show();
-                set_Historial("Setear configuracion","Set OK");
+                Toast.makeText(getContext(), "Set OK", Toast.LENGTH_LONG).show();
+                set_Historial("Setear configuracion", "Set OK");
             }
 
             @Override
@@ -1558,7 +1672,6 @@ public class EntradaFragment extends Fragment {
             }
         });
     }
-
 
 
     private void FP_Cliente_No_Categorizado() {
@@ -1696,7 +1809,7 @@ public class EntradaFragment extends Fragment {
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("780681022100 - RALLADOR", "100", 5000.00).quantity(1).iva(ivaRegistry.get("Gravado21")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 5000.00).quantity(1).iva(ivaRegistry.get("Gravado10.5")));
 
-        ArrayList<Tributes> tributeList= new ArrayList<>();
+        ArrayList<Tributes> tributeList = new ArrayList<>();
         tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IVA, "Percepcion 21", 5000, 150, 21.00));
         tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IVA, "Percepcion 10.5", 5000, 75, 10.50));
         bean.setTributes(tributeList);
@@ -1707,14 +1820,15 @@ public class EntradaFragment extends Fragment {
                         Toast.makeText(getContext(), "**FACTURA A OK**", Toast.LENGTH_LONG).show();
                         sleep();
                         executePaymentTest7(201.12, 200);
-                        set_Historial("Percepciones FP IVA","**FACTURA A OK**");
+                        set_Historial("Percepciones FP IVA", "**FACTURA A OK**");
 
                     }
+
                     @Override
                     public void onError(FiscalDriverException e) {
                         super.onError(e);
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        set_Historial("Percepciones FP IVA",e.getMessage());
+                        set_Historial("Percepciones FP IVA", e.getMessage());
                     }
                 }
         );
@@ -1731,7 +1845,7 @@ public class EntradaFragment extends Fragment {
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("780681022100 - RALLADOR         ", "100", 1000).quantity(1).iva(ivaRegistry.get("Gravado21")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "101", 5000).quantity(1).iva(ivaRegistry.get("Gravado10.5")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("779802439062 - PAN DE MESA GRANDE", "102", 500).quantity(1).iva(ivaRegistry.get("Gravado0")));
-        ArrayList<Tributes> tributeList= new ArrayList<>();
+        ArrayList<Tributes> tributeList = new ArrayList<>();
         tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Percepcion 21", 1000, 100.00, 21.00));
         tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Percepcion 10.5", 5000, 100.00, 10.50));
         tributeList.add(tributeFactory.newTribute(TributesModes.PERCEPCION_IIBB, "Percepcion 0", 500, 100.00, 0.00));
@@ -1742,21 +1856,52 @@ public class EntradaFragment extends Fragment {
                         Toast.makeText(getContext(), "**FACTURA A OK**", Toast.LENGTH_LONG).show();
                         sleep();
                         executePaymentTest7(201.12, 200);
-                        set_Historial("Percepciones FP IIBB","**FACTURA A OK**");
+                        set_Historial("Percepciones FP IIBB", "**FACTURA A OK**");
                     }
+
                     @Override
                     public void onError(FiscalDriverException e) {
                         super.onError(e);
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        set_Historial("Percepciones FP IIBB",e.getMessage());
+                        set_Historial("Percepciones FP IIBB", e.getMessage());
                     }
                 }
         );
     }
 
+    private void DownloadAfip() throws ParseException {
+        DownloadAfipBean afipBean = new DownloadAfipBean();
+        int requestCode = 0;
+        String path;
+
+        Date initDate = new SimpleDateFormat("yyyyMMdd").parse("20190101");
+        Date endDate = new SimpleDateFormat("yyyyMMdd").parse("20191231");
+
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},  requestCode );
+        }
+        path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/afip.zip";
+
+        afipBean.setFrom(initDate);
+        afipBean.setTo(endDate);
+        afipBean.setPath(path);
+
+        FiscalManager.getInstance().downloadAfip(afipBean, new ToastOnExceptionServiceCallback<String>(getContext()) {
+            @Override
+            public void onResult(String respuesta) {
+                Toast.makeText(getContext(), "Descarga en: " + respuesta, Toast.LENGTH_LONG).show();
+                set_Historial("Download Af + ip", "Descarga en: " + respuesta);
+            }
+
+            @Override
+            public void onError(FiscalDriverException e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                set_Historial("Download Afip", e.getMessage());
+            }
+        });
+
+    }
 
 }
-
-
 
 

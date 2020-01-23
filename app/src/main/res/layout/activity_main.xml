@@ -17,11 +17,13 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="false"
             android:background="?attr/colorPrimary"
+            android:clipChildren="false"
             android:visibility="visible"
+            app:tabGravity="fill"
             app:tabSelectedTextColor="#FFFFFF"
-            app:tabTextColor="#FFFFFF">
-        </android.support.design.widget.TabLayout>
+            app:tabTextColor="#FFFFFF" />
 
     </android.support.design.widget.AppBarLayout>
 

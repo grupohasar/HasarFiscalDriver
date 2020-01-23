@@ -5,6 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ListView
+        android:id="@+id/salidaList"
+        android:layout_width="match_parent"
+        android:layout_height="536dp"
+        android:paddingTop="55dp"/>
+
     <Button
         android:id="@+id/buttonRefresh"
         android:layout_width="121dp"
@@ -17,12 +23,4 @@
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
-
-    <ListView
-        android:id="@+id/salidaList"
-        android:layout_width="match_parent"
-        android:layout_height="536dp"
-        android:paddingTop="55dp"></ListView>
-
-
 </FrameLayout>
