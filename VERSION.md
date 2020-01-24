@@ -1,3 +1,5 @@
+VERSION 0.11.0
+Ahora permite generar una nota de credito B sin cargar cliente. Internamente se utiliza el medoto setGenericClient().
 Modificacion de diseño de aplicacion. Se debe seleccionar el grupo del test, y luego el test.
 Se agrega nuevo test para descarga de reporte de AFIP DownloadAfip()
 

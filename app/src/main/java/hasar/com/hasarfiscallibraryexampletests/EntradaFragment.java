@@ -1102,7 +1102,7 @@ public class EntradaFragment extends Fragment {
         InvoiceBean bean = new InvoiceBean();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_NOTA_CREDITO_B);
-        
+
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 35.72).quantity(1).iva(ivaRegistry.get("Gravado21")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
 
