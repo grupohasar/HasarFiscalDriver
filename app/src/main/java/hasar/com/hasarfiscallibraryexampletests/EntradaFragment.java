@@ -1066,11 +1066,11 @@ public class EntradaFragment extends Fragment {
         InvoiceBean bean = new InvoiceBean();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
-        bean.setClient(
+        /*bean.setClient(
                 clientFactory.newConsumidorFinal(
                         "PRUEBA_AND",
                         "CalleSiempreVivas 666",
-                        documentFactory.newDNI("34849766")));
+                        documentFactory.newDNI("34849766")));*/
 
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 35.72).quantity(1).iva(ivaRegistry.get("Gravado21")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
@@ -1102,12 +1102,7 @@ public class EntradaFragment extends Fragment {
         InvoiceBean bean = new InvoiceBean();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_NOTA_CREDITO_B);
-        bean.setClient(
-                clientFactory.newConsumidorFinal(
-                        "PRUEBA_AND",
-                        "CalleSiempreVivas 666",
-                        documentFactory.newDNI("34849766")));
-
+        
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 35.72).quantity(1).iva(ivaRegistry.get("Gravado21")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
 
@@ -1149,33 +1144,33 @@ public class EntradaFragment extends Fragment {
 
     private void Datos_Inicializacion() {
         FiscalManager.getInstance().initializationDataQuery(new ToastOnExceptionServiceCallback<RespuestaDatosInicializacion>(getContext()) {
-                                                                @Override
-                                                                public void onResult(RespuestaDatosInicializacion response) {
-                                                                    StringBuilder builder = new StringBuilder();
-                                                                    builder.append('\n');
-                                                                    builder.append("CUIT:  " + response.getCUIT());
-                                                                    builder.append('\n');
-                                                                    builder.append("Razon social:  " + response.getRazonSocial());
-                                                                    builder.append('\n');
-                                                                    builder.append("Registro:  " + response.getRegistro());
-                                                                    builder.append('\n');
-                                                                    builder.append("InicioAct:  " + response.getFechaInicioActividades());
-                                                                    builder.append('\n');
-                                                                    builder.append("InscripcionIIBB:  " + response.getIngBrutos());
-                                                                    builder.append('\n');
-                                                                    builder.append("POS:  " + response.getNumeroPos());
-                                                                    builder.append('\n');
-                                                                    builder.append("ResponsabilidadIVA:  " + response.getResponsabilidadIVA());
-                                                                    Toast.makeText(getContext(), builder, Toast.LENGTH_LONG).show();
-                                                                    set_Historial("Datos Inicializacion", builder.toString());
-                                                                }
+                @Override
+                public void onResult(RespuestaDatosInicializacion response) {
+                    StringBuilder builder = new StringBuilder();
+                    builder.append('\n');
+                    builder.append("CUIT:  " + response.getCUIT());
+                    builder.append('\n');
+                    builder.append("Razon social:  " + response.getRazonSocial());
+                    builder.append('\n');
+                    builder.append("Registro:  " + response.getRegistro());
+                    builder.append('\n');
+                    builder.append("InicioAct:  " + response.getFechaInicioActividades());
+                    builder.append('\n');
+                    builder.append("InscripcionIIBB:  " + response.getIngBrutos());
+                    builder.append('\n');
+                    builder.append("POS:  " + response.getNumeroPos());
+                    builder.append('\n');
+                    builder.append("ResponsabilidadIVA:  " + response.getResponsabilidadIVA());
+                    Toast.makeText(getContext(), builder, Toast.LENGTH_LONG).show();
+                    set_Historial("Datos Inicializacion", builder.toString());
+                }
 
-                                                                @Override
-                                                                public void onError(FiscalDriverException e) {
-                                                                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                                                                    set_Historial("Datos Inicializacion", e.getMessage());
-                                                                }
-                                                            }
+                @Override
+                public void onError(FiscalDriverException e) {
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    set_Historial("Datos Inicializacion", e.getMessage());
+                }
+            }
         );
     }
 
