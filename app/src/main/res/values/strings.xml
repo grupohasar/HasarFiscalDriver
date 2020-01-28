@@ -18,7 +18,7 @@
     <!-- GRUPO FISCAL PRINTER -->
     <string-array name="group_fp">
         <item>TESTS FACTURA</item>
-        <item>TESTS HEADER</item>
+        <item>TESTS HEADER/FOOTER</item>
         <item>TESTS MEDIOS DE PAGO</item>
         <item>TESTS PERCEPCIONES</item>
         <item>OTRAS OPERACIONES</item>

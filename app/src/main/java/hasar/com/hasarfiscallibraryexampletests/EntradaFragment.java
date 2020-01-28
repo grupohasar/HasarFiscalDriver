@@ -1066,13 +1066,13 @@ public class EntradaFragment extends Fragment {
         InvoiceBean bean = new InvoiceBean();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
-        /*bean.setClient(
+        bean.setClient(
                 clientFactory.newConsumidorFinal(
                         "PRUEBA_AND",
                         "CalleSiempreVivas 666",
-                        documentFactory.newDNI("34849766")));*/
+                        documentFactory.newDNI("34849766")));
 
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 35.72).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 20000).quantity(1).iva(ivaRegistry.get("Gravado21")));
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
 
         FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getContext()) {
@@ -1103,8 +1103,7 @@ public class EntradaFragment extends Fragment {
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_NOTA_CREDITO_B);
 
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 35.72).quantity(1).iva(ivaRegistry.get("Gravado21")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 20000.72).quantity(1).iva(ivaRegistry.get("Gravado21")));
 
         FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getContext()) {
                     @Override
@@ -1144,33 +1143,33 @@ public class EntradaFragment extends Fragment {
 
     private void Datos_Inicializacion() {
         FiscalManager.getInstance().initializationDataQuery(new ToastOnExceptionServiceCallback<RespuestaDatosInicializacion>(getContext()) {
-                @Override
-                public void onResult(RespuestaDatosInicializacion response) {
-                    StringBuilder builder = new StringBuilder();
-                    builder.append('\n');
-                    builder.append("CUIT:  " + response.getCUIT());
-                    builder.append('\n');
-                    builder.append("Razon social:  " + response.getRazonSocial());
-                    builder.append('\n');
-                    builder.append("Registro:  " + response.getRegistro());
-                    builder.append('\n');
-                    builder.append("InicioAct:  " + response.getFechaInicioActividades());
-                    builder.append('\n');
-                    builder.append("InscripcionIIBB:  " + response.getIngBrutos());
-                    builder.append('\n');
-                    builder.append("POS:  " + response.getNumeroPos());
-                    builder.append('\n');
-                    builder.append("ResponsabilidadIVA:  " + response.getResponsabilidadIVA());
-                    Toast.makeText(getContext(), builder, Toast.LENGTH_LONG).show();
-                    set_Historial("Datos Inicializacion", builder.toString());
-                }
+                                                                @Override
+                                                                public void onResult(RespuestaDatosInicializacion response) {
+                                                                    StringBuilder builder = new StringBuilder();
+                                                                    builder.append('\n');
+                                                                    builder.append("CUIT:  " + response.getCUIT());
+                                                                    builder.append('\n');
+                                                                    builder.append("Razon social:  " + response.getRazonSocial());
+                                                                    builder.append('\n');
+                                                                    builder.append("Registro:  " + response.getRegistro());
+                                                                    builder.append('\n');
+                                                                    builder.append("InicioAct:  " + response.getFechaInicioActividades());
+                                                                    builder.append('\n');
+                                                                    builder.append("InscripcionIIBB:  " + response.getIngBrutos());
+                                                                    builder.append('\n');
+                                                                    builder.append("POS:  " + response.getNumeroPos());
+                                                                    builder.append('\n');
+                                                                    builder.append("ResponsabilidadIVA:  " + response.getResponsabilidadIVA());
+                                                                    Toast.makeText(getContext(), builder, Toast.LENGTH_LONG).show();
+                                                                    set_Historial("Datos Inicializacion", builder.toString());
+                                                                }
 
-                @Override
-                public void onError(FiscalDriverException e) {
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    set_Historial("Datos Inicializacion", e.getMessage());
-                }
-            }
+                                                                @Override
+                                                                public void onError(FiscalDriverException e) {
+                                                                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                                                    set_Historial("Datos Inicializacion", e.getMessage());
+                                                                }
+                                                            }
         );
     }
 
@@ -1436,12 +1435,21 @@ public class EntradaFragment extends Fragment {
                         documentFactory.newDNI("34859766")));
 
         zoneConfigurator.cleanAll();
-        zoneConfigurator.configureHeaderOneZone(1, new Text("linea 1"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderOneZone(2, new Text("linea 2"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderOneZone(3, new Text("linea 3"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderTwoZone(1, new Text("linea 4"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderTwoZone(2, new Text("linea 5"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderTwoZone(3, new Text("linea 6"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderOneZone(1, new Text("HEADER ONE 1"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderOneZone(2, new Text("HEADER ONE 2"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderOneZone(3, new Text("HEADER ONE 3"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderTwoZone(1, new Text("HEADER TWO 4"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderTwoZone(2, new Text("HEADER TWO 5"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderTwoZone(3, new Text("HEADER TWO 6"), StationModes.ESTACION_TICKET);
+
+        zoneConfigurator.configureTailOneZone(1, new Text("TAIL ONE 1"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailOneZone(2, new Text("TAIL ONE 2"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailOneZone(3, new Text("TAIL ONE 3") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailOneZone(4, new Text("TAIL ONE 4") , StationModes.ESTACION_TICKET);
+
+        zoneConfigurator.configureTailTwoZone(1, new Text("TAIL TWO 1") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailTwoZone(2, new Text("TAIL TWO 2") , StationModes.ESTACION_TICKET);
+
 
         bean.setZones(zoneConfigurator.getZones());
 
@@ -1467,7 +1475,7 @@ public class EntradaFragment extends Fragment {
         );
     }
 
-    private void Header_Factura_B() {      //  testLinesZone_Ticket_B
+    private void Header_Factura_B() {
         InvoiceBean bean = new InvoiceBean();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
@@ -1475,13 +1483,23 @@ public class EntradaFragment extends Fragment {
                 clientFactory.newConsumidorFinal(
                         "PRUEBA",
                         "CalleSiempreViva 666",
-                        documentFactory.newNinguno(null)));
+                        documentFactory.newDNI("34859766")));
 
         zoneConfigurator.cleanAll();
-        zoneConfigurator.configureHeaderOneZone(1, new Text("linea 1"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderOneZone(2, new Text("linea 2"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderOneZone(3, new Text("linea 3"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderOneZone(4, new Text("linea 4"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderOneZone(1, new Text("HEADER ONE 1"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderOneZone(2, new Text("HEADER ONE 2"), StationModes.ESTACION_TICKET);
+
+        zoneConfigurator.configureHeaderTwoZone(1, new Text("HEADER TWO 1"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderTwoZone(2, new Text("HEADER TWO 2"), StationModes.ESTACION_TICKET);
+
+
+        zoneConfigurator.configureTailOneZone(1, new Text("TAIL ONE 1"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailOneZone(2, new Text("TAIL ONE 2"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailOneZone(3, new Text("TAIL ONE 3") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailOneZone(4, new Text("TAIL ONE 4") , StationModes.ESTACION_TICKET);
+
+        zoneConfigurator.configureTailTwoZone(1, new Text("TAIL TWO 1") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailTwoZone(2, new Text("TAIL TWO 2") , StationModes.ESTACION_TICKET);
 
         bean.setZones(zoneConfigurator.getZones());
 
@@ -1506,63 +1524,6 @@ public class EntradaFragment extends Fragment {
         );
     }
 
-    /*private void FE_Factura_B_Json() {
-        try {
-            String json = txtJson.getText().toString();
-            Gson gson = new Gson();
-
-            ElectronicInvoiceBeanImpl toRet = gson.fromJson(json, ElectronicInvoiceBeanImpl.class);
-
-            FiscalManager.getInstance().electronicInvoice(toRet, new ToastOnExceptionServiceCallback<ElectronicInvoiceResponse>(getApplicationContext()) {
-                        @Override
-                        public void onResult(ElectronicInvoiceResponse response) {
-                            StringBuilder builder = new StringBuilder();
-                            builder.append("STATUS: " + response.getStatus());
-                            builder.append('\n');
-                            builder.append("Detalle Error: " + response.getErrorDetail());
-                            builder.append('\n');
-                            builder.append("T.Number: " + response.getTransactionNumber());
-                            builder.append('\n');
-                            builder.append("CAE: " + response.getCae());
-                            builder.append('\n');
-                            builder.append("Total: " + response.getTotal());
-                            builder.append('\n');
-                            builder.append("Total IVA: " + response.getIVA());
-                            builder.append('\n');
-                            Toast.makeText(getApplicationContext(),
-                                    builder.toString(),
-                                    Toast.LENGTH_LONG)
-                                    .show();
-                            lastTransactionNumber = response.getTransactionNumber();
-
-                            //SIEMPRE MANDAR UN ACK LUEGO DE UNA FE!
-                            ElectronicInvoiceACKBean beanACK = electronicInvoiceFactory.newElectronicInvoiceACK("123ABC", 99, lastTransactionNumber, "30522211563");
-                            FiscalManager.getInstance().electronicInvoiceACK(beanACK, new ServiceCallback<Boolean>() {
-                                @Override
-                                public void onResult(Boolean response) {
-                                    //Toast.makeText(getApplicationContext(), response.toString().toUpperCase(), Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onError(FiscalDriverException ex) {
-                                    //Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onError(FiscalDriverException e) {
-                            super.onError(e);
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-            );
-        } catch (JsonSyntaxException e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }*/
-
     private void Header_Factura_A() {    //  testLinesZone_Ticket_A
         InvoiceBean bean = new InvoiceBean();
         List<InscripcionIIBB> InscripcionIIBBList = new ArrayList<InscripcionIIBB>();
@@ -1576,10 +1537,21 @@ public class EntradaFragment extends Fragment {
 
 
         zoneConfigurator.cleanAll();
-        zoneConfigurator.configureHeaderOneZone(1, new Text("linea 1"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderOneZone(2, new Text("linea 2"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderOneZone(3, new Text("linea 3"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderOneZone(4, new Text("linea 4"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderOneZone(1, new Text("HEADER ONE 1"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderOneZone(2, new Text("HEADER ONE 2"), StationModes.ESTACION_TICKET);
+
+        zoneConfigurator.configureHeaderTwoZone(1, new Text("HEADER TWO 1"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderTwoZone(2, new Text("HEADER TWO 2"), StationModes.ESTACION_TICKET);
+
+
+        zoneConfigurator.configureTailOneZone(1, new Text("TAIL ONE 1"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailOneZone(2, new Text("TAIL ONE 2"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailOneZone(3, new Text("TAIL ONE 3") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailOneZone(4, new Text("TAIL ONE 4") , StationModes.ESTACION_TICKET);
+
+        zoneConfigurator.configureTailTwoZone(1, new Text("TAIL TWO 1") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailTwoZone(2, new Text("TAIL TWO 2") , StationModes.ESTACION_TICKET);
+
         bean.setZones(zoneConfigurator.getZones());
 
         bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Leche", "103", 45.50).quantity(1).iva(ivaRegistry.get("Gravado0")));
@@ -1872,8 +1844,8 @@ public class EntradaFragment extends Fragment {
         Date initDate = new SimpleDateFormat("yyyyMMdd").parse("20190101");
         Date endDate = new SimpleDateFormat("yyyyMMdd").parse("20191231");
 
-        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},  requestCode );
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
         }
         path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/afip.zip";
 
