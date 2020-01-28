@@ -1438,9 +1438,9 @@ public class EntradaFragment extends Fragment {
         zoneConfigurator.configureHeaderOneZone(1, new Text("HEADER ONE 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderOneZone(2, new Text("HEADER ONE 2"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderOneZone(3, new Text("HEADER ONE 3"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderTwoZone(1, new Text("HEADER TWO 4"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderTwoZone(2, new Text("HEADER TWO 5"), StationModes.ESTACION_TICKET);
-        zoneConfigurator.configureHeaderTwoZone(3, new Text("HEADER TWO 6"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderTwoZone(1, new Text("HEADER TWO 1"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderTwoZone(2, new Text("HEADER TWO 2"), StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureHeaderTwoZone(3, new Text("HEADER TWO 3"), StationModes.ESTACION_TICKET);
 
         zoneConfigurator.configureTailOneZone(1, new Text("TAIL ONE 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureTailOneZone(2, new Text("TAIL ONE 2"), StationModes.ESTACION_TICKET);
@@ -1449,7 +1449,8 @@ public class EntradaFragment extends Fragment {
 
         zoneConfigurator.configureTailTwoZone(1, new Text("TAIL TWO 1") , StationModes.ESTACION_TICKET);
         zoneConfigurator.configureTailTwoZone(2, new Text("TAIL TWO 2") , StationModes.ESTACION_TICKET);
-
+        zoneConfigurator.configureTailTwoZone(3, new Text("TAIL TWO 3") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailTwoZone(4, new Text("TAIL TWO 4") , StationModes.ESTACION_TICKET);
 
         bean.setZones(zoneConfigurator.getZones());
 
@@ -1488,10 +1489,10 @@ public class EntradaFragment extends Fragment {
         zoneConfigurator.cleanAll();
         zoneConfigurator.configureHeaderOneZone(1, new Text("HEADER ONE 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderOneZone(2, new Text("HEADER ONE 2"), StationModes.ESTACION_TICKET);
-
+        zoneConfigurator.configureHeaderOneZone(3, new Text("HEADER ONE 3"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderTwoZone(1, new Text("HEADER TWO 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderTwoZone(2, new Text("HEADER TWO 2"), StationModes.ESTACION_TICKET);
-
+        zoneConfigurator.configureHeaderTwoZone(3, new Text("HEADER TWO 3"), StationModes.ESTACION_TICKET);
 
         zoneConfigurator.configureTailOneZone(1, new Text("TAIL ONE 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureTailOneZone(2, new Text("TAIL ONE 2"), StationModes.ESTACION_TICKET);
@@ -1500,6 +1501,8 @@ public class EntradaFragment extends Fragment {
 
         zoneConfigurator.configureTailTwoZone(1, new Text("TAIL TWO 1") , StationModes.ESTACION_TICKET);
         zoneConfigurator.configureTailTwoZone(2, new Text("TAIL TWO 2") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailTwoZone(3, new Text("TAIL TWO 3") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailTwoZone(4, new Text("TAIL TWO 4") , StationModes.ESTACION_TICKET);
 
         bean.setZones(zoneConfigurator.getZones());
 
@@ -1539,10 +1542,10 @@ public class EntradaFragment extends Fragment {
         zoneConfigurator.cleanAll();
         zoneConfigurator.configureHeaderOneZone(1, new Text("HEADER ONE 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderOneZone(2, new Text("HEADER ONE 2"), StationModes.ESTACION_TICKET);
-
+        zoneConfigurator.configureHeaderOneZone(3, new Text("HEADER ONE 3"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderTwoZone(1, new Text("HEADER TWO 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderTwoZone(2, new Text("HEADER TWO 2"), StationModes.ESTACION_TICKET);
-
+        zoneConfigurator.configureHeaderTwoZone(3, new Text("HEADER TWO 3"), StationModes.ESTACION_TICKET);
 
         zoneConfigurator.configureTailOneZone(1, new Text("TAIL ONE 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureTailOneZone(2, new Text("TAIL ONE 2"), StationModes.ESTACION_TICKET);
@@ -1551,6 +1554,8 @@ public class EntradaFragment extends Fragment {
 
         zoneConfigurator.configureTailTwoZone(1, new Text("TAIL TWO 1") , StationModes.ESTACION_TICKET);
         zoneConfigurator.configureTailTwoZone(2, new Text("TAIL TWO 2") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailTwoZone(3, new Text("TAIL TWO 3") , StationModes.ESTACION_TICKET);
+        zoneConfigurator.configureTailTwoZone(4, new Text("TAIL TWO 4") , StationModes.ESTACION_TICKET);
 
         bean.setZones(zoneConfigurator.getZones());
 
