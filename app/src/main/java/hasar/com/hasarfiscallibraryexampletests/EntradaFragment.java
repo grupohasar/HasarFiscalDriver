@@ -1,8 +1,6 @@
 package hasar.com.hasarfiscallibraryexampletests;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -30,45 +27,35 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hasar.fiscal.dataLayer.beans.Checkout;
+import com.hasar.fiscal.dataLayer.beans.FiscalPayment;
 import com.hasar.fiscal.dataLayer.beans.InscripcionIIBB;
 import com.hasar.fiscal.dataLayer.beans.JurisdictionMapper;
 import com.hasar.fiscal.dataLayer.beans.Perception;
 import com.hasar.fiscal.dataLayer.beans.PointOfSales;
 import com.hasar.fiscal.dataLayer.beans.Subsidiary;
 import com.hasar.fiscal.dataLayer.beans.TaxException;
-import com.hasar.fiscal.dataLayer.beans.Tributes;
-
-
-import com.hasar.fiscal.dataLayer.beans.TributesModeMapper;
-import com.hasar.fiscal.dataLayer.beans.download.DownloadAfipBean;
-import com.hasar.fiscal.dataLayer.beans.get.GetDatesRangeByZBean;
-import com.hasar.fiscal.dataLayer.beans.get.GetFirstElectronicReportBlockBean;
-import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoiceACKBean;
-import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoicerRegisterCompanyBean;
-import com.hasar.fiscal.dataLayer.beans.response.ElectronicInvoiceRegisterCompanyResponse;
-import com.hasar.fiscal.dataLayer.beans.response.GetDatesRangeByZResponse;
-import com.hasar.fiscal.dataLayer.beans.response.GetFirstElectronicReportBlockResponse;
-import com.hasar.fiscal.dataLayer.beans.response.GetNextElectronicReportBlockResponse;
-import com.hasar.fiscal.dataLayer.beans.response.LastDownloadedElectronicAfipReportResponse;
-import com.hasar.fiscal.dataLayer.beans.response.RespuestaDatosInicializacion;
-import com.hasar.fiscal.dataLayer.beans.response.PerceptionResponse;
-import com.hasar.fiscal.dataLayer.enums.Jurisdictions;
-
-import com.hasar.fiscal.dataLayer.beans.FiscalPayment;
 import com.hasar.fiscal.dataLayer.beans.Text;
+import com.hasar.fiscal.dataLayer.beans.Tributes;
+import com.hasar.fiscal.dataLayer.beans.TributesModeMapper;
 import com.hasar.fiscal.dataLayer.beans.configuration.ConfigureFiscalPrinterBean;
+import com.hasar.fiscal.dataLayer.beans.download.DownloadAfipBean;
 import com.hasar.fiscal.dataLayer.beans.operation.CloseInvoiceBean;
+import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoiceACKBean;
 import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoiceBean;
+import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoicerRegisterCompanyBean;
 import com.hasar.fiscal.dataLayer.beans.operation.InvoiceBean;
 import com.hasar.fiscal.dataLayer.beans.response.CloseFiscalDayZResponse;
 import com.hasar.fiscal.dataLayer.beans.response.CloseInvoiceResponse;
+import com.hasar.fiscal.dataLayer.beans.response.ElectronicInvoiceRegisterCompanyResponse;
 import com.hasar.fiscal.dataLayer.beans.response.ElectronicInvoiceResponse;
 import com.hasar.fiscal.dataLayer.beans.response.InvoiceResponse;
+import com.hasar.fiscal.dataLayer.beans.response.PerceptionResponse;
+import com.hasar.fiscal.dataLayer.beans.response.RespuestaDatosInicializacion;
 import com.hasar.fiscal.dataLayer.beans.response.StateQueryResponse;
 import com.hasar.fiscal.dataLayer.enums.FiscalState;
 import com.hasar.fiscal.dataLayer.enums.InvoiceTypes;
+import com.hasar.fiscal.dataLayer.enums.Jurisdictions;
 import com.hasar.fiscal.dataLayer.enums.PaymentTypes;
-import com.hasar.fiscal.dataLayer.enums.ReportTypeAFIP;
 import com.hasar.fiscal.dataLayer.enums.StationModes;
 import com.hasar.fiscal.dataLayer.enums.TaxConditions;
 import com.hasar.fiscal.dataLayer.enums.TributesModes;
@@ -92,7 +79,6 @@ import com.hasar.fiscal.fiscalManager.FiscalManager;
 import com.hasar.fiscal.fiscalManager.FiscalManagerConfigurationBuilder;
 import com.hasar.fiscal.fiscalManager.SecondGenerationLocation;
 import com.hasar.fiscal.services.base.ServiceCallback;
-import com.hasar.fiscal.services.get.GetLastDownloadedElectronicAfipReportService;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -101,7 +87,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -209,116 +194,116 @@ public class EntradaFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                initFiscalManager();
 
+            initFiscalManager();
                 if (rbElectronic.isChecked()) { //TESTS FE
                     switch (dropdown_group.getSelectedItemPosition()) {
-                        case 0:
+                        case GroupType.Subgroup_FACTURA_ELECTRONICA.FE_A:
                             FE_Factura_A();
                             break;
-                        case 1:
+                        case GroupType.Subgroup_FACTURA_ELECTRONICA.FE_B:
                             FE_Factura_B();
                             break;
-                        case 2:
+                        case GroupType.Subgroup_FACTURA_ELECTRONICA.FE_C:
                             FE_Factura_C();
                             break;
-                        case 3:
+                        case GroupType.Subgroup_FACTURA_ELECTRONICA.FE_ACK:
                             FE_ACK();
                             break;
-                        case 4:
+                        case GroupType.Subgroup_FACTURA_ELECTRONICA.PERCEPCION_FE_A:
                             Percepcion_Factura_A();
                             break;
-                        case 5:
+                        case GroupType.Subgroup_FACTURA_ELECTRONICA.PERCEPCION_FE_A_2:
                             Percepcion_Factura_A_02();
                             break;
-                        case 6:
+                        case GroupType.Subgroup_FACTURA_ELECTRONICA.AFIP:
                             FE_Afip_Is_Alive();
                             break;
-                        case 7:
+                        case GroupType.Subgroup_FACTURA_ELECTRONICA.REGISTER_COMPANY:
                             FE_Register_Company();
                             break;
                     }
                 } else { //TESTS FP
                     switch (dropdown_group.getSelectedItemPosition()) {
-                        case 0: //FACTURA
+                        case GroupType.TESTS_FACTURA:
                             switch (dropdown_subgroup.getSelectedItemPosition()) {
-                                case 0:
+                                case GroupType.Subgroup_TESTS_FACTURA.FACTURA_A:
                                     FP_Factura_A();
                                     break;
-                                case 1:
+                                case GroupType.Subgroup_TESTS_FACTURA.FACTURA_B:
                                     FP_Factura_B();
                                     break;
-                                case 2:
+                                case GroupType.Subgroup_TESTS_FACTURA.FACTURA_C:
                                     FP_Factura_C();
                                     break;
-                                case 3:
+                                case GroupType.Subgroup_TESTS_FACTURA.NOTA_DE_CREDITO_B:
                                     FP_NDC_B();
                                     break;
-                                case 4:
+                                case GroupType.Subgroup_TESTS_FACTURA.TIQUE:
                                     FP_Tique();
                                     break;
-                                case 5:
+                                case GroupType.Subgroup_TESTS_FACTURA.NO_CATEGORIZADO:
                                     FP_Cliente_No_Categorizado();
                                     break;
                             }
                             break;
-                        case 1: //HEADER
+                        case GroupType.TESTS_HEADER_FOOTER:
                             switch (dropdown_subgroup.getSelectedItemPosition()) {
-                                case 0:
+                                case GroupType.Subgroup_TESTS_HEADER_FOOTER.HEADER_FACTURA_A:
                                     Header_Factura_A();
                                     break;
-                                case 1:
+                                case GroupType.Subgroup_TESTS_HEADER_FOOTER.HEADER_FACTURA_B:
                                     Header_Factura_B();
                                     break;
-                                case 2:
+                                case GroupType.Subgroup_TESTS_HEADER_FOOTER.HEADER_NO_FISCAL:
                                     Header_No_Fiscal();
                                     break;
                             }
                             break;
-                        case 2: //Pagos
+                        case GroupType.TESTS_MEDIOS_DE_PAGO:
                             switch (dropdown_subgroup.getSelectedItemPosition()) {
-                                case 0:
+                                case GroupType.Subgroup_TESTS_MEDIOS_DE_PAGO.MEDIOS_PAGO_4:
                                     Medios_De_Pago(4);
                                     break;
-                                case 1:
+                                case GroupType.Subgroup_TESTS_MEDIOS_DE_PAGO.MEDIOS_PAGO_5:
                                     Medios_De_Pago(5);
                                     break;
-                                case 2:
+                                case GroupType.Subgroup_TESTS_MEDIOS_DE_PAGO.MEDIOS_PAGO_6:
                                     Medios_De_Pago(6);
                                     break;
                             }
                             break;
-                        case 3: //Percepciones
+                        case GroupType.TESTS_PERCEPCIONES:
                             switch (dropdown_subgroup.getSelectedItemPosition()) {
-                                case 0:
+                                case GroupType.Subgroup_TESTS_PERCEPCIONES.IIBB:
                                     FP_Percepcion_IIBB();
                                     break;
-                                case 1:
+                                case GroupType.Subgroup_TESTS_PERCEPCIONES.IVA:
                                     FP_Percepcion_IVA();
                                     break;
                             }
                             break;
-                        case 4: //Otras Operaciones
+                        case GroupType.OTRAS_OPERACIONES:
                             switch (dropdown_subgroup.getSelectedItemPosition()) {
-                                case 0:
+                                case GroupType.Subgroup_OTRAS_OPERACIONES.CIERRE_Z:
                                     Cierre_Z();
                                     break;
-                                case 1:
+                                case GroupType.Subgroup_OTRAS_OPERACIONES.CANCELAR:
                                     Cancelar();
                                     break;
-                                case 2:
+                                case GroupType.Subgroup_OTRAS_OPERACIONES.SET_CONFIGURACION:
                                     set_Configuracion('A', 8000, 8000);
                                     break;
-                                case 3:
+                                case GroupType.Subgroup_OTRAS_OPERACIONES.GET_CONFIGURACION:
                                     get_Configuracion();
                                     break;
-                                case 4:
+                                case GroupType.Subgroup_OTRAS_OPERACIONES.DATOS_INICIALIZACION:
                                     Datos_Inicializacion();
                                     break;
-                                case 5:
+                                case GroupType.Subgroup_OTRAS_OPERACIONES.JSON_TEST:
                                     FP_Json();
                                     break;
-                                case 6:
+                                case GroupType.Subgroup_OTRAS_OPERACIONES.DOWNLOAD_AFIP:
                                     try {
                                         DownloadAfip();
                                     } catch (ParseException e) {
@@ -1438,6 +1423,7 @@ public class EntradaFragment extends Fragment {
         zoneConfigurator.configureHeaderOneZone(1, new Text("HEADER ONE 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderOneZone(2, new Text("HEADER ONE 2"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderOneZone(3, new Text("HEADER ONE 3"), StationModes.ESTACION_TICKET);
+
         zoneConfigurator.configureHeaderTwoZone(1, new Text("HEADER TWO 1"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderTwoZone(2, new Text("HEADER TWO 2"), StationModes.ESTACION_TICKET);
         zoneConfigurator.configureHeaderTwoZone(3, new Text("HEADER TWO 3"), StationModes.ESTACION_TICKET);
