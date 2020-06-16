@@ -37,6 +37,7 @@ import com.hasar.fiscal.dataLayer.beans.TaxException;
 import com.hasar.fiscal.dataLayer.beans.Text;
 import com.hasar.fiscal.dataLayer.beans.Tributes;
 import com.hasar.fiscal.dataLayer.beans.TributesModeMapper;
+import com.hasar.fiscal.dataLayer.beans.Zone;
 import com.hasar.fiscal.dataLayer.beans.configuration.ConfigureFiscalPrinterBean;
 import com.hasar.fiscal.dataLayer.beans.download.DownloadAfipBean;
 import com.hasar.fiscal.dataLayer.beans.operation.CloseInvoiceBean;
@@ -1049,6 +1050,8 @@ public class EntradaFragment extends Fragment {
 
     private void FP_Factura_B() {
         InvoiceBean bean = new InvoiceBean();
+
+        zoneConfigurator.deleteAll();
 
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
         bean.setClient(
