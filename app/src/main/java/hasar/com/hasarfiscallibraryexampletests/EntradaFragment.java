@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.hasar.fiscal.dataLayer.beans.AssociatedDocumentBean;
 import com.hasar.fiscal.dataLayer.beans.Checkout;
 import com.hasar.fiscal.dataLayer.beans.FiscalPayment;
 import com.hasar.fiscal.dataLayer.beans.InscripcionIIBB;
@@ -45,6 +46,8 @@ import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoiceACKBean;
 import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoiceBean;
 import com.hasar.fiscal.dataLayer.beans.operation.ElectronicInvoicerRegisterCompanyBean;
 import com.hasar.fiscal.dataLayer.beans.operation.InvoiceBean;
+import com.hasar.fiscal.dataLayer.beans.query.AssociatedDocumentQueryBean;
+import com.hasar.fiscal.dataLayer.beans.response.AssociatedDocumentQueryResponse;
 import com.hasar.fiscal.dataLayer.beans.response.CloseFiscalDayZResponse;
 import com.hasar.fiscal.dataLayer.beans.response.CloseInvoiceResponse;
 import com.hasar.fiscal.dataLayer.beans.response.ElectronicInvoiceRegisterCompanyResponse;
@@ -245,6 +248,9 @@ public class EntradaFragment extends Fragment {
                                     break;
                                 case GroupType.Subgroup_TESTS_FACTURA.NO_CATEGORIZADO:
                                     FP_Cliente_No_Categorizado();
+                                    break;
+                                case GroupType.Subgroup_TESTS_FACTURA.FACTURA_B_DOCUMENTO_ASOCIADO:
+                                    FP_Factura_B_Documentos_Asociados();
                                     break;
                             }
                             break;
@@ -1860,7 +1866,60 @@ public class EntradaFragment extends Fragment {
                 set_Historial("Download Afip", e.getMessage());
             }
         });
+    }
 
+    private void FP_Factura_B_Documentos_Asociados() {
+        InvoiceBean bean = new InvoiceBean();
+        zoneConfigurator.deleteAll();
+
+        bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
+        bean.setClient(
+                clientFactory.newConsumidorFinal(
+                        "Consumidor Final",
+                        "Avenida 666",
+                        documentFactory.newDNI("34889766")));
+
+        AssociatedDocumentBean doc1 = new AssociatedDocumentBean();
+        doc1.setIndex(1);
+        doc1.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
+        doc1.setPosNumber("1");
+        doc1.setReceiptNumber("1");
+
+        AssociatedDocumentBean doc2 = new AssociatedDocumentBean();
+        doc2.setIndex(2);
+        doc2.setInvoiceType(InvoiceTypes.TIQUE);
+        doc2.setPosNumber("2");
+        doc2.setReceiptNumber("2");
+
+        bean.associatedDocument = new ArrayList<>();
+        bean.associatedDocument.add(doc1);
+        bean.associatedDocument.add(doc2);
+
+        bean.setAssociatedDocument(bean.associatedDocument);
+
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 20000).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
+
+        FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getContext()) {
+            @Override
+            public void onResult(InvoiceResponse response) {
+                executePayment(10000);
+                response.setRoundAdjustment(5);
+                double redondeo = response.getRoundAdjustment();
+
+                StringBuilder builder = new StringBuilder();
+                builder.append("Factura B Documentos Asociados OK");
+                Toast.makeText(getContext(), builder, Toast.LENGTH_LONG).show();
+                set_Historial("Factura B Documentos Asociados OK", builder.toString());
+            }
+
+            @Override
+            public void onError(FiscalDriverException e) {
+                super.onError(e);
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                set_Historial("Factura B Documentos Asociados OK", e.getMessage());
+            }
+        });
     }
 
 }

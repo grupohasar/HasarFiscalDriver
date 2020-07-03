@@ -14,6 +14,7 @@ public class GroupType {
         public static final int NOTA_DE_CREDITO_B = 3;
         public static final int TIQUE = 4;
         public static final int NO_CATEGORIZADO = 5;
+        public static final int FACTURA_B_DOCUMENTO_ASOCIADO = 6;
     }
 
     class Subgroup_TESTS_HEADER_FOOTER {
