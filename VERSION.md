@@ -1,3 +1,7 @@
+VERSION 0.12.0
+Permite asociar más de un documento a una factura mediante setAssociatedDocument(), diferenciar documentos por index mediante AssociatedDocumentBean.setIndex()
+Nuevo metodo para eliminar headers mediante el metodo ZoneConfigurator.deleteAll();
+
 VERSION 0.11.0
 Ahora permite generar una nota de credito B sin cargar cliente. Internamente se utiliza el medoto setGenericClient().
 Modificacion de diseño de aplicacion. Se debe seleccionar el grupo del test, y luego el test.
