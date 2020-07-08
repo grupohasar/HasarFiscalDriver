@@ -11,7 +11,9 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import com.google.gson.Gson;
 import com.hasar.fiscal.dataLayer.beans.AssociatedDocumentBean;
 import com.hasar.fiscal.dataLayer.beans.Checkout;
 import com.hasar.fiscal.dataLayer.beans.FiscalPayment;
+import com.hasar.fiscal.dataLayer.beans.FiscalText;
 import com.hasar.fiscal.dataLayer.beans.InscripcionIIBB;
 import com.hasar.fiscal.dataLayer.beans.JurisdictionMapper;
 import com.hasar.fiscal.dataLayer.beans.Perception;
@@ -56,6 +59,7 @@ import com.hasar.fiscal.dataLayer.beans.response.InvoiceResponse;
 import com.hasar.fiscal.dataLayer.beans.response.PerceptionResponse;
 import com.hasar.fiscal.dataLayer.beans.response.RespuestaDatosInicializacion;
 import com.hasar.fiscal.dataLayer.beans.response.StateQueryResponse;
+import com.hasar.fiscal.dataLayer.enums.DisplayModes;
 import com.hasar.fiscal.dataLayer.enums.FiscalState;
 import com.hasar.fiscal.dataLayer.enums.InvoiceTypes;
 import com.hasar.fiscal.dataLayer.enums.Jurisdictions;
@@ -69,6 +73,7 @@ import com.hasar.fiscal.dataLayer.factories.DocumentFactory;
 import com.hasar.fiscal.dataLayer.factories.ElectronicInvoiceBeanImpl;
 import com.hasar.fiscal.dataLayer.factories.ElectronicInvoiceFactory;
 import com.hasar.fiscal.dataLayer.factories.FiscalItemFactory;
+import com.hasar.fiscal.dataLayer.factories.FiscalItemImpl;
 import com.hasar.fiscal.dataLayer.factories.FiscalPaymentFactory;
 import com.hasar.fiscal.dataLayer.factories.IVARegistry;
 import com.hasar.fiscal.dataLayer.factories.InscripcionIIBBFactory;
@@ -1066,8 +1071,15 @@ public class EntradaFragment extends Fragment {
                         "CalleSiempreVivas 666",
                         documentFactory.newDNI("34849766")));
 
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 20000).quantity(1).iva(ivaRegistry.get("Gravado21")));
-        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        FiscalItemImpl fiscalItem;
+        fiscalItem = fiscalItemFactory.newFiscalItem("COCA COLA", "105", 150).quantity(1).iva(ivaRegistry.get("Gravado21"));
+        fiscalItem.fiscalTexts = new ArrayList<>();
+        fiscalItem.fiscalTexts.add(new FiscalText("TEST"));
+
+        bean.getFiscalItems().add(fiscalItem);
+
+        //bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 20000).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        //bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
 
         FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getContext()) {
                     @Override
@@ -1921,7 +1933,7 @@ public class EntradaFragment extends Fragment {
             }
         });
     }
-
+    
 }
 
 
