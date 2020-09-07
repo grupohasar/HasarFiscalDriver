@@ -1,3 +1,6 @@
+VERSION 0.12.1
+Se agrega Remito R para archivos asociados en test FP_Factura_B_Documentos_Asociados().
+
 VERSION 0.12.0
 Permite asociar más de un documento a una factura mediante setAssociatedDocument(), diferenciar documentos por index mediante AssociatedDocumentBean.setIndex()
 Nuevo metodo para eliminar headers mediante el metodo ZoneConfigurator.deleteAll();
