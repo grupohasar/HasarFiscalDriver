@@ -29,7 +29,6 @@ import com.google.gson.Gson;
 import com.hasar.fiscal.dataLayer.beans.AssociatedDocumentBean;
 import com.hasar.fiscal.dataLayer.beans.Checkout;
 import com.hasar.fiscal.dataLayer.beans.FiscalPayment;
-import com.hasar.fiscal.dataLayer.beans.FiscalText;
 import com.hasar.fiscal.dataLayer.beans.InscripcionIIBB;
 import com.hasar.fiscal.dataLayer.beans.JurisdictionMapper;
 import com.hasar.fiscal.dataLayer.beans.Perception;
@@ -67,7 +66,6 @@ import com.hasar.fiscal.dataLayer.factories.DocumentFactory;
 import com.hasar.fiscal.dataLayer.factories.ElectronicInvoiceBeanImpl;
 import com.hasar.fiscal.dataLayer.factories.ElectronicInvoiceFactory;
 import com.hasar.fiscal.dataLayer.factories.FiscalItemFactory;
-import com.hasar.fiscal.dataLayer.factories.FiscalItemImpl;
 import com.hasar.fiscal.dataLayer.factories.FiscalPaymentFactory;
 import com.hasar.fiscal.dataLayer.factories.IVARegistry;
 import com.hasar.fiscal.dataLayer.factories.InscripcionIIBBFactory;
@@ -1054,26 +1052,21 @@ public class EntradaFragment extends Fragment {
     }
 
     private void FP_Factura_B() {
+        //Instantiate a InvoiceBean, to define an Invoice
         InvoiceBean bean = new InvoiceBean();
-
         zoneConfigurator.deleteAll();
-
+        //Set the invoice type with the InvoiceTypes enumeration.
         bean.setInvoiceType(InvoiceTypes.TIQUE_FACTURA_B);
         bean.setClient(
                 clientFactory.newConsumidorFinal(
                         "PRUEBA_AND",
                         "CalleSiempreVivas 666",
                         documentFactory.newDNI("34849766")));
-
-        FiscalItemImpl fiscalItem;
-        fiscalItem = fiscalItemFactory.newFiscalItem("COCA COLA", "105", 150).quantity(1).iva(ivaRegistry.get("Gravado21"));
-        fiscalItem.fiscalTexts = new ArrayList<>();
-        fiscalItem.fiscalTexts.add(new FiscalText("TEST"));
-
-        bean.getFiscalItems().add(fiscalItem);
-
-        //bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 20000).quantity(1).iva(ivaRegistry.get("Gravado21")));
-        //bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("COca lata", "105", 37.57).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        //Define a item to print in the invoice.,
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Sprite lata", "105", 200).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        bean.getFiscalItems().add(fiscalItemFactory.newFiscalItem("Coca lata", "105", 100).quantity(1).iva(ivaRegistry.get("Gravado21")));
+        //Define a discount to apply
+        bean.getDiscounts().add(discountsFactory.newDiscount(10,"Descuento 1"));
 
         FiscalManager.getInstance().invoice(bean, new ToastOnExceptionServiceCallback<InvoiceResponse>(getContext()) {
                     @Override
