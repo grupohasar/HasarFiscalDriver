@@ -296,7 +296,7 @@ public class EntradaFragment extends Fragment {
                                     Cancelar();
                                     break;
                                 case GroupType.Subgroup_OTRAS_OPERACIONES.SET_CONFIGURACION:
-                                    set_Configuracion('A', 8000, 8000);
+                                    set_Configuracion('A', 8000, 8000, 'N');
                                     break;
                                 case GroupType.Subgroup_OTRAS_OPERACIONES.GET_CONFIGURACION:
                                     get_Configuracion();
@@ -1591,10 +1591,11 @@ public class EntradaFragment extends Fragment {
         });
     }
 
-    private void set_Configuracion(char tipoHabiltiacion, int nominatedLimit, int notNomiatedLimit) {
+    private void set_Configuracion(char tipoHabiltiacion, int nominatedLimit, int notNomiatedLimit, char reimpresionCancelados) {
         configuracionImpresor.setTipoHabilitacion(tipoHabiltiacion);
         configuracionImpresor.setNominatedLimit(nominatedLimit);
         configuracionImpresor.setNotNominatedLimit(notNomiatedLimit);
+        configuracionImpresor.setReimpresionCancelados(reimpresionCancelados);
         FiscalManager.getInstance().configureFiscalPrinter(configuracionImpresor, new ToastOnExceptionServiceCallback<Void>(getContext()) {
             @Override
             public void onResult(Void aVoid) {
@@ -1624,6 +1625,8 @@ public class EntradaFragment extends Fragment {
                 builder.append("No nomitated limit: " + configureFiscalPrinterBean.getNotNominatedLimit());
                 builder.append('\n');
                 builder.append("Tipo habilitacion: " + configureFiscalPrinterBean.getTipoHabilitacion());
+                builder.append('\n');
+                builder.append("Reimpresion cancelados: " + configureFiscalPrinterBean.getReimpresionCancelados());
                 builder.append('\n');
 
                 Toast.makeText(getContext(), builder.toString(), Toast.LENGTH_LONG).show();
